@@ -17,7 +17,7 @@ async def force_subscribe(bot, cmd):
         if user.status == "kicked":
             await bot.send_message(
                 chat_id=cmd.from_user.id,
-                text="✨ You are Banned due not to pay attention to the [rules](https://t.me/FutureTechnologyOfficial/1257). Contact [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8) if you think you've banned wrongly.\n\n✨ شما به علت عدم رعایت [قوانین](https://t.me/FutureTechnologyOfficial/1257) بن شده اید. اگر فکر میکنید بن شدن شما اشتباه بوده و قوانین را رعایت کرده اید می توانید با [گروه پشتیبانی](https://t.me/joinchat/riq-psSksFtiMDU8) در ارتباط باشید.",
+                text="✨ You are Banned due not to pay attention to the rules !. Contact [Support Group](https://t.me/+5vcBlhrleuMwNThh) if you think you've banned wrongly.\n\n✨.",
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
@@ -25,7 +25,7 @@ async def force_subscribe(bot, cmd):
     except UserNotParticipant:
         await bot.send_message(
             chat_id=cmd.from_user.id,
-            text="**✨ Please join updates channel to use me. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button.\n\n**✨لطفا در چنل عضو شوید. تنها اعضای چنل می توانند از بات استفاده کنند.**\n\nپس از عضویت بر روی دکمه refresh کلیک کنید.",
+            text="**✨ Please join updates channel to use me. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button.\n\n**✨.",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
