@@ -22,7 +22,7 @@ async def button(bot, cmd: CallbackQuery):
           return
       except UserNotParticipant:
         await cmd.message.edit(
-          text="**✨ You still haven't joined the updates channel. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button.\n\n**✨شما هنوز عضو چنل نشدید. تنها اعضای چنل می توانند از بات استفاده کنند.**\n\nپس از عضویت بر روی دکمه refresh کلیک کنید.",
+          text="**✨ You still haven't joined the updates channel. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button**\n.",
           reply_markup=InlineKeyboardMarkup(
             [
               [
@@ -48,8 +48,8 @@ async def button(bot, cmd: CallbackQuery):
       parse_mode="Markdown",
       reply_markup=InlineKeyboardMarkup(
         [
-          [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/FutureTechnologyOfficial'), InlineKeyboardButton('✵ Support Group ✵', url='https://t.me/joinchat/riq-psSksFtiMDU8')],
-          [InlineKeyboardButton('✵ Developer ✵', url='https://t.me/CipherXBot')]
+          [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('✵ Rules✵', url='https://t.me/highspeed_movies/7')],
+          [InlineKeyboardButton('✵ Donate! ✵', url='https://t.me/putsextrover/7')]
         ]
       ),
       disable_web_page_preview=True
