@@ -31,7 +31,7 @@ async def start(b, m : Message):
             reply_markup=InlineKeyboardMarkup(
                 [
                     [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('☯ Donate ☯', url='https://t.me/PutsExtrovert/7')],
-                    [InlineKeyboardButton('☯ Contact ADmin ☯', url='https://FilmyxBot')]
+                    [InlineKeyboardButton('☯ Contact ADmin ☯', url='https://t.me/FilmyxBot')]
                 ]
             ),
             disable_web_page_preview=True
