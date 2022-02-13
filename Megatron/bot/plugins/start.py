@@ -27,7 +27,7 @@ async def start(b, m : Message):
             if fsub == 400:
                 return
         await m.reply(
-            text=f"""Hey Dear {m.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n⚠ **Don't forget to read the [rules](https://t.me/FutureTechnologyOfficial/1257) first!**\n\nسلام {m.from_user.mention(style="md")} عزیز 🙋🏻‍♂️\nمن بات تبدیل فایل به لینک هستم\nفایل تلگرامی خود را ارسال کنید تا لینک دانلود پر سرعت آن را دریافت نمایید\n\n**⚠  لطفا قبل از استفاده از بات [قوانین](https://t.me/FutureTechnologyOfficial/1257)را مطالعه نمایید!**\n\nهمچنین با زدن دستور /nim می‌توانید لینک های دریافتی خود را نیم بها نمایید.""",
+            text=f"""Hey Dear {m.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n⚠ **Don't forget to Join Channel first!**\n\n""",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/FutureTechnologyOfficial'), InlineKeyboardButton('✵ Support Group ✵', url='https://t.me/joinchat/riq-psSksFtiMDU8')],
@@ -55,7 +55,7 @@ async def help_handler(bot, message):
         if fsub == 400:
             return
     await message.reply_text(
-        text="✨ Send me any file, I'll give you its direct download link\n\nAlso I'm supported in channels. Add me to channel as admin to make me workable\n\n✨ فایل تلگرامی خود را برای من بفرستید تا لینک دانلود مستقیم آن را برای شما بفرستم\n\nهمچنین با ارتقای من به عنوان ادمین در چنل خود می توانید از امکانات من استفاده کنید، بدین صورت که در زمان پست فایل جدید در چنل دکمه شیشه ای دریافت لینک مستقیم فایل پست شده در زیر پست ایجاد می گردد.",
+        text="✨ Send me any file, I'll give you its direct download link\n\nAlso I'm supported in channels. Add me to channel as admin to make me workable\n\n✨",
         parse_mode="Markdown",
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
