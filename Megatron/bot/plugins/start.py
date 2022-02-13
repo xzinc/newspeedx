@@ -60,8 +60,8 @@ async def help_handler(bot, message):
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("✵ Support Group ✵", url="https://t.me/joinchat/riq-psSksFtiMDU8"), InlineKeyboardButton("✵ Update Channel ✵", url="https://t.me/FutureTechnologyOfficial")],
-                [InlineKeyboardButton("✵ Developer ✵", url="https://t.me/CipherXBot")]
+                [InlineKeyboardButton("✵ MAin Channel ✵", url="https://t.me/+FcsqT7u8gt1mMTdh"), InlineKeyboardButton("✵ NetWork ✵", url="https://t.me/highpeed_movies")],
+                [InlineKeyboardButton("✵ Developer ✵", url="https://t.me/filmyxBot")]
             ]
         )
     )
