@@ -44,7 +44,7 @@ async def button(bot, cmd: CallbackQuery):
         )
         return
     await cmd.message.edit(
-      text=f"""Hey Dear {cmd.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\nسلام {cmd.from_user.mention(style="md")} عزیز 🙋🏻‍♂️\nمن بات تبدیل فایل به لینک هستم\nفایل تلگرامی خود را ارسال کنید تا لینک دانلود پر سرعت آن را دریافت نمایید\n\nهمچنین با زدن دستور /nim می‌توانید لینک های دریافتی خود را نیم بها نمایید.""",
+      text=f"""Hey Dear {cmd.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n""",
       parse_mode="Markdown",
       reply_markup=InlineKeyboardMarkup(
         [
