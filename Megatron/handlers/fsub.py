@@ -25,7 +25,7 @@ async def force_subscribe(bot, cmd):
     except UserNotParticipant:
         await bot.send_message(
             chat_id=cmd.from_user.id,
-            text="**✨ Due to Heavy Usage Of this Bot Please join updates channel to use me!. Only channel subscribers can acess the bot❤️.**\n\nAfter joining tap refresh button.\n\n**✨.",
+            text="**✨ ⚡️Dᴜᴇ ᴛᴏ Oᴠᴇʀʟᴏᴀᴅ, Oɴʟʏ Cʜᴀɴɴᴇʟ Sᴜʙsᴄʀɪʙᴇʀs ᴄᴀɴ ᴜsᴇ ᴛʜᴇ Bᴏᴛ✔️.\n⚽️Jᴏɪɴ Our ᴜᴘᴅᴀᴛᴇ ᴄʜᴀɴɴᴇʟ ᴛᴏ ᴜsᴇ  acess the bot❤️.**\n\nAfter joining tap refresh button.\n\n**✨.",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
