@@ -25,7 +25,7 @@ async def force_subscribe(bot, cmd):
     except UserNotParticipant:
         await bot.send_message(
             chat_id=cmd.from_user.id,
-            text="**✨ Please join updates channel to use me. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button.\n\n**✨.",
+            text="**✨ Due to Heavy Usage Of this Bot Please join updates channel to use me!. Only channel subscribers can acess the bot❤️.**\n\nAfter joining tap refresh button.\n\n**✨.",
             reply_markup=InlineKeyboardMarkup(
                 [
                     [
@@ -42,7 +42,7 @@ async def force_subscribe(bot, cmd):
     except Exception:
         await bot.send_message(
             chat_id=cmd.from_user.id,
-            text="Something went Wrong. Contact [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8).",
+            text="Something went Wrong. Contact [Support](https://t.me/filmyxbot).",
             parse_mode="markdown",
             disable_web_page_preview=True
         )
