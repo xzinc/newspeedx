@@ -22,7 +22,7 @@ async def button(bot, cmd: CallbackQuery):
           return
       except UserNotParticipant:
         await cmd.message.edit(
-          text="**✨ You still haven't joined the updates channel. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button**\n.",
+          text="**✨ You still haven't joined the updates channel. Only channel subscribers can use the bot.**\n\nAfter joining tap refresh button❗️**\n",
           reply_markup=InlineKeyboardMarkup(
             [
               [
