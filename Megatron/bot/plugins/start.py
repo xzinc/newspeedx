@@ -30,8 +30,8 @@ async def start(b, m : Message):
             text=f"""Hey Dear {m.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n⚠ **Don't forget to Join Channel first!**\n\n""",
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/FutureTechnologyOfficial'), InlineKeyboardButton('✵ Support Group ✵', url='https://t.me/joinchat/riq-psSksFtiMDU8')],
-                    [InlineKeyboardButton('✵ Developer ✵', url='https://t.me/CipherXBot')]
+                    [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('☯ Donate ☯', url='https://t.me/PutsExtrovert/7')],
+                    [InlineKeyboardButton('☯ Contact ADmin ☯', url='https://FilmyxBot')]
                 ]
             ),
             disable_web_page_preview=True
