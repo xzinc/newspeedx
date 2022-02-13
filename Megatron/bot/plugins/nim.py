@@ -24,7 +24,7 @@ async def nimdownloader(c: Client, m: Message):
         except UserNotParticipant:
             await c.send_message(
                 chat_id=m.chat.id,
-                text="**Please join updates channel to use me**\nOnly channel subscribers can use the bot\nAfter joining tap help button\n\n✨لطفا در چنل عضو شوید. تنها اعضای چنل می توانند از بات استفاده کنند.\nپس از عضویت بر روی /help کلیک کنید.",
+                text="**Please join updates channel to use me**\nOnly channel subscribers can use the bot\nAfter joining tap help button\n\n✨.",
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [
@@ -44,7 +44,7 @@ async def nimdownloader(c: Client, m: Message):
             return
     chat = m.chat
     while True:
-        url = await StreamBot.ask(chat.id, "⚠️This part is only for Iranian users⚠️\n\n**لطفا لینک خود را ارسال کنید تا لینک نیم بهای آن را دریافت نمایید**")
+        url = await StreamBot.ask(chat.id, "⚠️This part is only for Iranian users⚠️\n\n**")
         if not url.text:
             continue
         txt = url.text.strip()
