@@ -49,7 +49,7 @@ async def button(bot, cmd: CallbackQuery):
       reply_markup=InlineKeyboardMarkup(
         [
           [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('✵ Rules✵', url='https://t.me/highspeed_movies/7')],
-          [InlineKeyboardButton('✵ Donate! ✵', url='https://t.me/putsextrover/7')]
+          [InlineKeyboardButton('✵ Donate! ✵', url='https://t.me/putsextrovert/7')]
         ]
       ),
       disable_web_page_preview=True
