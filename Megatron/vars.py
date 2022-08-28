@@ -6,10 +6,10 @@ load_dotenv()
 
 class Var(object):
     MULTI_CLIENT = False
-    API_ID = int(environ.get("API_ID" , "7326452"))
-    API_HASH = str(environ.get("API_HASH" , "a865401e13d06664d7ffa3558f8e2940"))
+    API_ID = int(environ.get("API_ID" ))
+    API_HASH = str(environ.get("API_HASH"))
     SESSION_NAME = str(environ.get('SESSION_NAME', 'AvishkarPatil'))
-    BOT_TOKEN = str(environ.get("BOT_TOKEN" , "1940498592:AAENjs-8x0m_nXmapmMIjMjXHK0aaC0kuTI"))
+    BOT_TOKEN = str(environ.get("BOT_TOKEN" ))
     BROADCAST_AS_COPY = bool(environ.get("BROADCAST_AS_COPY", False))
     SLEEP_THRESHOLD = int(environ.get("SLEEP_THRESHOLD", "60"))  # 1 minte
     WORKERS = int(environ.get("WORKERS", "6"))  # 6 workers = 6 commands at once
@@ -29,7 +29,7 @@ class Var(object):
         APP_NAME = str(environ.get("APP_NAME", "SpeedXstreamz"))
     else:
         ON_HEROKU = False
-    DATABASE_URL = str(environ.get('DATABASE_URL' , "mongodb+srv://manojsaiBot:omsaaheth@cluster0.xjp6g.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"))
+    DATABASE_URL = str(environ.get('DATABASE_URL'"))
     UPDATES_CHANNEL = environ.get("UPDATES_CHANNEL", None)
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-100")).split()))
     FQDN = (
