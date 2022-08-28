@@ -1,4 +1,4 @@
-''' from os import environ
+'''from os import environ
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -42,5 +42,5 @@ class Var(object):
     else:
         URL = "http{}://{}{}/".format(
             "s" if HAS_SSL else "", FQDN, "" if NO_PORT else ":" + str(PORT)
-        )
-'''
+        )'''
+
