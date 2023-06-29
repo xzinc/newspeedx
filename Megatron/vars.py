@@ -29,7 +29,7 @@ class Var(object):
         APP_NAME = str(environ.get("APP_NAME", "SpeedXstreamz"))
     else:
         ON_HEROKU = False
-    DATABASE_URL = str(environ.get('DATABASE_URL'"))
+    DATABASE_URL = str(environ.get('DATABASE_URL'))
     UPDATES_CHANNEL = environ.get("UPDATES_CHANNEL", None)
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-100")).split()))
     FQDN = (
