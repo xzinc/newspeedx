@@ -2,7 +2,7 @@ aiohttp
 aiofiles
 dnspython
 motor
-pyrogram
+
 pyromod
 python-dotenv
 requests
