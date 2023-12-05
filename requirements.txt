@@ -6,4 +6,4 @@ pyromod
 python-dotenv
 requests
 tgcrypto
-pyrogram==1.4.0
+pyrogram==1.4.7
