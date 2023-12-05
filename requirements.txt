@@ -2,9 +2,8 @@ aiohttp
 aiofiles
 dnspython
 motor
-
 pyromod
 python-dotenv
 requests
 tgcrypto
-pyrogram==2.0.0
+pyrogram==1.4.0
