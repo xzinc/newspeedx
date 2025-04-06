@@ -30,8 +30,8 @@ async def start(b, m : Message):
             text=f"""Hey Dear {m.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n⚠ **Don't forget to Join Channel first!**\n\n""",
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('😊 Donate 😊', url='https://t.me/PutsExtrovert/7')],
-                    [InlineKeyboardButton('🧧 Contact ADmin 🧧', url='https://t.me/FilmyxBot')]
+                    [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+uW4Saio7cmYwNjk1'), InlineKeyboardButton('😊 Donate 😊', url='https://t.me/TG_FatherBoT?start=donate')],
+                    [InlineKeyboardButton('🧧 Contact ADmin 🧧', url='https://t.me/TG_FatherBoT')]
                 ]
             ),
             disable_web_page_preview=True
@@ -45,7 +45,7 @@ async def start(b, m : Message):
         if u.status == "kicked" or u.status == "banned":
             await b.send_message(
                 chat_id=m.from_user.id,
-                text="✨ You're Banned due not to pay attention to the [rules](https://t.me/FutureTechnologyOfficial/1257). Contact [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8) if you think you've banned wrongly.\n\n✨ شما به علت عدم رعایت [قوانین](https://t.me/FutureTechnologyOfficial/1257) بن شده اید. اگر فکر میکنید بن شدن شما اشتباه بوده و قوانین را رعایت کرده اید می توانید با [گروه پشتیبانی](https://t.me/joinchat/riq-psSksFtiMDU8) در ارتباط باشید.",
+                text="✨ You're Banned due not to pay attention to the [rules](https://t.me/+uW4Saio7cmYwNjk1). Contact [Support ](https://t.me/TG_FatherBoT) if you think you've banned wrongly.\n\n✨",
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
@@ -68,8 +68,8 @@ async def help_handler(bot, message):
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [
-                [InlineKeyboardButton("✵ MAin Channel ✵", url="https://t.me/+FcsqT7u8gt1mMTdh"), InlineKeyboardButton("✵ NetWork ✵", url="https://t.me/highpeed_movies")],
-                [InlineKeyboardButton("✵ Developer ✵", url="https://t.me/filmyxBot")]
+                [InlineKeyboardButton("✵ MAin Channel ✵", url="https://t.me/+uW4Saio7cmYwNjk1"), InlineKeyboardButton("✵ NetWork ✵", url="https://t.me/highpeed_movies")],
+                [InlineKeyboardButton("✵ Developer ✵", url="https://t.me/TG_FatherBoT")]
             ]
         )
     )
