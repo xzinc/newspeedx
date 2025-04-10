@@ -7,7 +7,7 @@ from Megatron.vars import Var
 from Megatron.utils.human_readable import humanbytes
 from Megatron.utils.database import Database
 from Megatron.handlers.fsub import force_subscribe
- 
+
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 
@@ -49,7 +49,7 @@ async def start(b, m : Message):
                 parse_mode="markdown",
                 disable_web_page_preview=True
             )
-          
+
 @StreamBot.on_message(filters.command('help') & filters.private & ~filters.edited)
 async def help_handler(bot, message):
     if not await db.is_user_exist(message.from_user.id):
@@ -59,7 +59,7 @@ async def help_handler(bot, message):
             f"#NEW_USER #joins #join_log: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) Started !!"
         )
     if Var.UPDATES_CHANNEL:
-        fsub = await force_subscribe(b, m)
+        fsub = await force_subscribe(bot, message)
         if fsub == 400:
             return
     await message.reply_text(

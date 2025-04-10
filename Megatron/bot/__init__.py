@@ -35,8 +35,7 @@ StreamBot = Client(
     workdir="Megatron",
     plugins={"root": "Megatron/bot/plugins"},
     sleep_threshold=Var.SLEEP_THRESHOLD,
-    workers=Var.WORKERS,
-    in_memory=True  # Store session in memory for better performance
+    workers=Var.WORKERS
 )
 
 # Dictionary to store multiple bot clients for load balancing
