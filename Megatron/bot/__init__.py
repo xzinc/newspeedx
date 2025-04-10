@@ -2,6 +2,11 @@ from os import getcwd
 from pyromod import listen
 
 from pyrogram import Client
+from pyrogram.session import Session
+
+# Fix for "msg_id is too low" error
+# Set a large time offset (30 seconds in the future)
+Session.time_offset = 30
 
 from ..vars import Var
 
