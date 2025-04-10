@@ -2,19 +2,9 @@ import asyncio
 import logging
 import sys
 import os
-import time
 
-# Run the Pyrogram patch before importing Pyrogram
-try:
-    # Try to import and run the patch
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from pyrogram_patch import patch_pyrogram
-    patch_result = patch_pyrogram()
-    logging.info(f"Pyrogram patch result: {patch_result}")
-except Exception as e:
-    logging.warning(f"Could not run Pyrogram patch: {e}")
-    # Set a very large time offset directly in the environment
-    os.environ['PYROGRAM_TIME_OFFSET'] = '120'
+# Set a very large time offset directly in the environment
+os.environ['PYROGRAM_TIME_OFFSET'] = '120'
 
 # Now import Pyrogram and other modules
 from .vars import Var
@@ -23,6 +13,7 @@ from pyrogram import idle
 from pyrogram.session import Session
 
 # Set a very large time offset directly
+# This is critical to fix the "msg_id is too low" error
 Session.time_offset = 120
 logging.info(f"Set Session.time_offset to 120 seconds directly in __main__.py")
 

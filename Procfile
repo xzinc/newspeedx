@@ -1,1 +1,1 @@
-web: python patch_pyrogram.py
+web: python -m Megatron
