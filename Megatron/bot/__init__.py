@@ -28,14 +28,15 @@ except ImportError:
         logging.warning(f"Could not set Pyrogram time offset: {e}")
 
 StreamBot = Client(
-  session_name=Var.SESSION_NAME,
+    name=Var.SESSION_NAME,
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
+    bot_token=Var.BOT_TOKEN,
     workdir="Megatron",
     plugins={"root": "Megatron/bot/plugins"},
-    bot_token=Var.BOT_TOKEN,
     sleep_threshold=Var.SLEEP_THRESHOLD,
     workers=Var.WORKERS,
+    in_memory=True,  # Store session in memory for better performance
 )
 
 # Dictionary to store multiple bot clients for load balancing

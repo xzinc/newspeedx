@@ -7,6 +7,7 @@ from Megatron import utils
 from Megatron import bot_info
 from Megatron.server import web_server
 from Megatron.bot.clients import initialize_clients
+from Megatron.bot import StreamBot
 from Megatron.utils.database import Database
 
 

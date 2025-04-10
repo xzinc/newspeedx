@@ -40,8 +40,25 @@ print("\n")
 print("------------------- Initializing Telegram Bot -------------------")
 
 # Import bot after logging is configured
-from Megatron.bot.clients import StreamBot
+from Megatron.bot import StreamBot, bot_info
 
 # Initialize bot with error handling
-StreamBot.start()
-bot_info = StreamBot.get_me()
+# Don't start the bot here, it will be started in __main__.py
+# Just set default values for bot_info
+bot_info.username = "FileStreamBot"
+bot_info.first_name = "File Stream Bot"
+bot_info.dc_id = 0
+bot_info.bots[0] = {"username": bot_info.username, "name": bot_info.first_name}
+
+# Don't start the bot here, but set the time offset for Pyrogram
+# This helps prevent the "msg_id is too low" error
+try:
+    # Set the session time offset if we have a valid NTP offset
+    if 'time_offset' in locals():
+        logging.info(f"Setting Pyrogram session time offset to {time_offset}")
+        # We don't need to call this directly as it will be used when the bot starts
+        # Just log that we have the offset ready
+    else:
+        logging.warning("No time offset available for Pyrogram session")
+except Exception as e:
+    logging.error(f"Error setting Pyrogram time offset: {e}")

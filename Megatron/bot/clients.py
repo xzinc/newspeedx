@@ -5,8 +5,15 @@ from . import multi_clients, work_loads, StreamBot
 from ..vars import Var
 
 async def initialize_clients():
-    multi_clients[0] = StreamBot
-    work_loads[0] = 0
+    # Start the main bot
+    try:
+        await StreamBot.start()
+        print(f"Started main bot: {StreamBot.me.first_name}")
+        multi_clients[0] = StreamBot
+        work_loads[0] = 0
+    except Exception as e:
+        print(f"Failed to start main bot: {e}")
+        raise  # Re-raise the exception to stop initialization
     all_tokens = TokenParser().parse_from_env()
     if not all_tokens:
         print("No additional clients found, using default client")
