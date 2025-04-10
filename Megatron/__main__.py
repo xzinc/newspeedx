@@ -7,6 +7,7 @@ from Megatron import utils
 from Megatron import bot_info
 from Megatron.server import web_server
 from Megatron.bot.clients import initialize_clients
+from Megatron.utils.database import Database
 
 
 logging.basicConfig(
@@ -22,6 +23,27 @@ loop = asyncio.get_event_loop()
 async def start_services():
     print("----------------------------- DONE -----------------------------")
     print()
+
+    # Initialize database
+    print("-------------------- Initializing Database --------------------")
+    try:
+        # Initialize database once
+        db = Database.get_instance(Var.DATABASE_URL, Var.SESSION_NAME)
+        if db is not None:
+            # Check if col attribute exists and is not None
+            if hasattr(db, 'col') and db.col is not None:
+                await db.create_index()
+                logging.info("Database initialized successfully with indexes")
+            else:
+                logging.warning("Database initialized but collection is not available")
+        else:
+            logging.warning("Failed to initialize database")
+    except Exception as e:
+        logging.error(f"Error initializing database: {e}")
+        logging.warning("Continuing with limited database functionality")
+    print("----------------------------- DONE -----------------------------")
+    print()
+
     print(
         "----------------------------- Initializing Clients -----------------------------"
     )

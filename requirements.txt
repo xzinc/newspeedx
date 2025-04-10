@@ -7,3 +7,4 @@ python-dotenv
 requests
 tgcrypto
 pyrogram==1.4.7
+ntplib
