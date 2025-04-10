@@ -4,17 +4,8 @@ import sys
 import os
 import time
 
-# Run the Pyrogram patch before importing Pyrogram
-try:
-    # Try to import and run the patch
-    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    from pyrogram_patch import patch_pyrogram
-    patch_result = patch_pyrogram()
-    logging.info(f"Pyrogram patch result: {patch_result}")
-except Exception as e:
-    logging.warning(f"Could not run Pyrogram patch: {e}")
-    # Set a large time offset directly in the environment
-    os.environ['PYROGRAM_TIME_OFFSET'] = '60'
+# Set a large time offset directly in the environment
+os.environ['PYROGRAM_TIME_OFFSET'] = '60'
 
 # Now import Pyrogram and other modules
 from .vars import Var
