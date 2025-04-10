@@ -1,9 +1,8 @@
-import os
 import logging
-import time
-from typing import Dict, Any
+from typing import Dict, Any  # Used for type hints
 
-from pyromod import listen
+# pyromod is required for the bot to work properly
+from pyromod import listen  # Required for the bot to work
 from pyrogram import Client
 from pyrogram.session import Session
 

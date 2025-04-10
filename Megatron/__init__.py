@@ -1,9 +1,8 @@
 import time
 import logging
 import sys
-import ntplib
-from datetime import datetime, timezone
-from .vars import Var
+import ntplib  # Make sure this is installed: pip install ntplib
+from .vars import Var  # Used by other modules that import from here
 
 # Configure logging only if not already configured
 if not logging.getLogger().handlers:
@@ -56,7 +55,8 @@ print("\n")
 print("------------------- Initializing Telegram Bot -------------------")
 
 # Import bot after logging is configured
-from Megatron.bot import StreamBot, bot_info
+# We only need bot_info here, StreamBot is imported elsewhere
+from Megatron.bot import bot_info
 
 # Initialize bot with error handling
 # Don't start the bot here, it will be started in __main__.py
