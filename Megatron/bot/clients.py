@@ -1,31 +1,13 @@
-import time
-import ntplib
 import logging
 from pyrogram import Client
-from pyrogram.session import Session
 
 from Megatron.utils import TokenParser
 from . import multi_clients, work_loads, StreamBot
 from ..vars import Var
 
 async def initialize_clients():
-    # Fix time synchronization issues
-    try:
-        # Try to get time from NTP server
-        ntp_client = ntplib.NTPClient()
-        response = ntp_client.request('pool.ntp.org', version=3)
-        time_offset = response.offset
-
-        # Set the time offset for all Pyrogram sessions
-        Session.time_offset = time_offset
-        logging.info(f"Set Pyrogram session time offset to {time_offset} seconds from NTP")
-    except Exception as e:
-        logging.warning(f"Failed to synchronize time with NTP: {e}")
-        # Set a default time offset to avoid 'msg_id is too low' errors
-        # This is a fallback solution - adding 10 seconds to current time
-        time_offset = 10
-        Session.time_offset = time_offset
-        logging.info(f"Set default time offset to {time_offset} seconds")
+    # Time synchronization is handled in bot/__init__.py
+    # We just need to start the clients here
 
     # Start the main bot
     try:

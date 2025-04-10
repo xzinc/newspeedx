@@ -23,24 +23,34 @@ if not logging.getLogger().handlers:
 # Set version and start time
 __version__ = 2.3
 
-# Synchronize system time with NTP server
+# Set a default positive time offset to ensure msg_id is high enough
+# This is critical for the bot to work properly
+time_offset = 30  # 30 seconds in the future
+logging.info(f"Default time offset: {time_offset} seconds")
+
+# Try to get a more accurate time offset from NTP server
 try:
     ntp_client = ntplib.NTPClient()
     response = ntp_client.request('pool.ntp.org', version=3)
-    # Adjust system time offset for accurate timestamps
-    time_offset = response.offset
-    logging.info(f"NTP time offset: {time_offset} seconds")
+
+    # Only use NTP offset if it's positive (future time)
+    # This ensures msg_id will be high enough
+    if response.offset > 0:
+        time_offset = response.offset
+        logging.info(f"Updated time offset from NTP: {time_offset} seconds")
+    else:
+        logging.warning(f"NTP returned negative offset ({response.offset}), using default offset instead")
+
     # Use adjusted time for StartTime
     StartTime = time.time() + time_offset
-    # Export time_offset for use in other modules
-    __all__ = ['__version__', 'StartTime', 'time_offset']
 except Exception as e:
     logging.warning(f"Failed to synchronize time with NTP server: {e}")
-    # Fallback to system time
-    StartTime = time.time()
-    time_offset = 0
-    # Export variables without time_offset
-    __all__ = ['__version__', 'StartTime', 'time_offset']
+    # Fallback to default time offset
+    StartTime = time.time() + time_offset
+    logging.info(f"Using default time offset: {time_offset} seconds")
+
+# Export variables for use in other modules
+__all__ = ['__version__', 'StartTime', 'time_offset']
 
 print("\n")
 print("------------------- Initializing Telegram Bot -------------------")
