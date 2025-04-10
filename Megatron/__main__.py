@@ -13,8 +13,8 @@ try:
     logging.info(f"Pyrogram patch result: {patch_result}")
 except Exception as e:
     logging.warning(f"Could not run Pyrogram patch: {e}")
-    # Set a large time offset directly in the environment
-    os.environ['PYROGRAM_TIME_OFFSET'] = '60'
+    # Set a very large time offset directly in the environment
+    os.environ['PYROGRAM_TIME_OFFSET'] = '120'
 
 # Now import Pyrogram and other modules
 from .vars import Var
@@ -22,9 +22,9 @@ from aiohttp import web
 from pyrogram import idle
 from pyrogram.session import Session
 
-# Set a large time offset directly
-Session.time_offset = 60
-logging.info(f"Set Session.time_offset to 60 seconds directly in __main__.py")
+# Set a very large time offset directly
+Session.time_offset = 120
+logging.info(f"Set Session.time_offset to 120 seconds directly in __main__.py")
 
 from Megatron import utils
 from Megatron import bot_info

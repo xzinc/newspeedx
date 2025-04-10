@@ -11,10 +11,10 @@ from ..vars import Var
 # Fix for "msg_id is too low" error by setting a time offset
 # This is critical for the bot to work properly
 
-# Set a very large default time offset (60 seconds in the future)
+# Set a very large default time offset (120 seconds in the future)
 # This ensures that msg_id will always be high enough
-Session.time_offset = 60
-logging.info("Set default Pyrogram session time offset to 60 seconds")
+Session.time_offset = 120
+logging.info("Set default Pyrogram session time offset to 120 seconds")
 
 # Try to get the time offset from environment variable
 import os
