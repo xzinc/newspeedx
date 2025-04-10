@@ -1,1 +1,1 @@
-web: python -m Megatron
+web: python run.py

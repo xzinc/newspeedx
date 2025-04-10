@@ -1,9 +1,31 @@
 import asyncio
 import logging
 import sys
+import os
+import time
+
+# Run the Pyrogram patch before importing Pyrogram
+try:
+    # Try to import and run the patch
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from pyrogram_patch import patch_pyrogram
+    patch_result = patch_pyrogram()
+    logging.info(f"Pyrogram patch result: {patch_result}")
+except Exception as e:
+    logging.warning(f"Could not run Pyrogram patch: {e}")
+    # Set a large time offset directly in the environment
+    os.environ['PYROGRAM_TIME_OFFSET'] = '60'
+
+# Now import Pyrogram and other modules
 from .vars import Var
 from aiohttp import web
 from pyrogram import idle
+from pyrogram.session import Session
+
+# Set a large time offset directly
+Session.time_offset = 60
+logging.info(f"Set Session.time_offset to 60 seconds directly in __main__.py")
+
 from Megatron import utils
 from Megatron import bot_info
 from Megatron.server import web_server

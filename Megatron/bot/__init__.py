@@ -11,32 +11,22 @@ from ..vars import Var
 # Fix for "msg_id is too low" error by setting a time offset
 # This is critical for the bot to work properly
 
-# Set a large default time offset (30 seconds in the future)
+# Set a very large default time offset (60 seconds in the future)
 # This ensures that msg_id will always be high enough
-Session.time_offset = 30
-logging.info("Set default Pyrogram session time offset to 30 seconds")
+Session.time_offset = 60
+logging.info("Set default Pyrogram session time offset to 60 seconds")
 
-# Try to get a more accurate time offset if possible
-try:
-    # Try to get the time offset from the main module
-    from .. import time_offset
-    # Set the time offset for all Pyrogram sessions
-    if time_offset > 0:
-        Session.time_offset = time_offset
-        logging.info(f"Updated Pyrogram session time offset to {time_offset} seconds from main module")
-except ImportError:
-    # If time_offset is not available, try to get it from NTP
+# Try to get the time offset from environment variable
+import os
+env_offset = os.environ.get('PYROGRAM_TIME_OFFSET')
+if env_offset:
     try:
-        import ntplib
-        ntp_client = ntplib.NTPClient()
-        response = ntp_client.request('pool.ntp.org', version=3)
-        # Only update if the NTP offset is positive (future time)
-        if response.offset > 0:
-            Session.time_offset = response.offset
-            logging.info(f"Updated Pyrogram session time offset to {response.offset} seconds from NTP")
-    except Exception as e:
-        logging.warning(f"Could not get more accurate time offset from NTP: {e}")
-        logging.info("Continuing with default time offset of 30 seconds")
+        env_offset = int(env_offset)
+        if env_offset > 0:
+            Session.time_offset = env_offset
+            logging.info(f"Updated Pyrogram session time offset to {env_offset} seconds from environment variable")
+    except ValueError:
+        logging.warning(f"Invalid PYROGRAM_TIME_OFFSET value: {env_offset}")
 
 StreamBot = Client(
     session_name=Var.SESSION_NAME,
