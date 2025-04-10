@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import sys
 from .vars import Var
 from aiohttp import web
 from pyrogram import idle
@@ -10,13 +11,26 @@ from Megatron.bot.clients import initialize_clients
 from Megatron.bot import StreamBot
 from Megatron.utils.database import Database
 
+# Configure logging only if not already configured
+if not logging.getLogger().handlers:
+    # Remove any existing handlers to avoid duplicate logs
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-)
+    # Configure logging with a single handler
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+        ]
+    )
+
+# Reduce logging noise from libraries
 logging.getLogger("pyrogram").setLevel(logging.ERROR)
 logging.getLogger("aiohttp").setLevel(logging.ERROR)
 logging.getLogger("aiohttp.web").setLevel(logging.ERROR)
+logging.getLogger("motor").setLevel(logging.WARNING)
 
 loop = asyncio.get_event_loop()
 
