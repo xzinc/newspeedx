@@ -6,21 +6,6 @@ import os
 # Set a very large time offset directly in the environment
 os.environ['PYROGRAM_TIME_OFFSET'] = '300'
 
-# Configure logging first so we can see the session fix logs
-if not logging.getLogger().handlers:
-    # Remove any existing handlers to avoid duplicate logs
-    for handler in logging.root.handlers[:]:
-        logging.root.removeHandler(handler)
-
-    # Configure logging with a single handler
-    logging.basicConfig(
-        level=logging.INFO,
-        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-        handlers=[
-            logging.StreamHandler(sys.stdout),
-        ]
-    )
-
 # Apply the session fix before importing Pyrogram
 from Megatron.utils.session_fix import apply_session_fix
 apply_session_fix()
@@ -31,7 +16,7 @@ from aiohttp import web
 from pyrogram import idle
 from pyrogram.session import Session
 
-# Set a very large time offset directly again
+# Set a very large time offset directly
 # This is critical to fix the "msg_id is too low" error
 Session.time_offset = 300
 logging.info(f"Set Session.time_offset to 300 seconds directly in __main__.py")
@@ -40,10 +25,20 @@ from Megatron import utils
 from Megatron import bot_info
 from Megatron.server import web_server
 from Megatron.bot.clients import initialize_clients
-from Megatron.bot import StreamBot
+# StreamBot is imported in initialize_clients
+# from Megatron.bot import StreamBot
 from Megatron.utils.database import Database
 
-# Logging is already configured above
+# Configure logging only if not already configured
+if not logging.getLogger().handlers:
+    # Configure logging with a single handler
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+        handlers=[
+            logging.StreamHandler(sys.stdout),
+        ]
+    )
 
 # Reduce logging noise from libraries
 logging.getLogger("pyrogram").setLevel(logging.ERROR)

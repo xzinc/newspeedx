@@ -5,11 +5,12 @@ from pyrogram.errors import UserNotParticipant
 from Megatron.bot import StreamBot
 from Megatron.vars import Var
 from Megatron.utils.database import Database
-from Megatron.handlers.fsub import force_subscribe  # Used in other parts of the code
+# This import is used in other parts of the code
+# from Megatron.handlers.fsub import force_subscribe
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.command('settings') & filters.private & ~filters.edited)
+@StreamBot.on_message(filters.command('settings') & filters.private)
 async def settings_handler(bot, message: Message):
     """
     Handle the /settings command to show user settings
@@ -28,7 +29,7 @@ async def settings_handler(bot, message: Message):
             if user.status == "kicked":
                 await message.reply_text(
                     text="Sorry, you are banned. Contact support.",
-                    parse_mode="markdown",
+                    parse_mode="md",
                     disable_web_page_preview=True
                 )
                 return
@@ -42,13 +43,13 @@ async def settings_handler(bot, message: Message):
                         ]
                     ]
                 ),
-                parse_mode="markdown"
+                parse_mode="md"
             )
             return
         except Exception:
             await message.reply_text(
                 text="Something went wrong. Contact support.",
-                parse_mode="markdown",
+                parse_mode="md",
                 disable_web_page_preview=True
             )
             return
@@ -59,7 +60,7 @@ async def settings_handler(bot, message: Message):
              "• You can customize your experience with this bot\n"
              "• Get information about your account\n"
              "• Check your usage statistics",
-        parse_mode="Markdown",
+        parse_mode="md",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Account Info", callback_data="account_info")],
@@ -82,7 +83,7 @@ async def account_info_callback(_, callback_query):
              f"• User ID: `{user_id}`\n"
              f"• Name: {user_name}\n"
              f"• Bot Status: Active",
-        parse_mode="Markdown",
+        parse_mode="md",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Back to Settings", callback_data="back_to_settings")]
@@ -92,7 +93,7 @@ async def account_info_callback(_, callback_query):
 
 @StreamBot.on_callback_query(filters.regex('^usage_stats$'))
 async def usage_stats_callback(_, callback_query):
-    # user_id would be used if we were fetching actual usage statistics
+    # We would use user_id if we were fetching actual usage statistics
     # user_id = callback_query.from_user.id
 
     await callback_query.answer("Loading usage statistics...")
@@ -105,7 +106,7 @@ async def usage_stats_callback(_, callback_query):
              "• Files Processed: Not tracked yet\n"
              "• Bandwidth Used: Not tracked yet\n"
              "• Account Created: Not tracked yet",
-        parse_mode="Markdown",
+        parse_mode="md",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Back to Settings", callback_data="back_to_settings")]
@@ -122,7 +123,7 @@ async def back_to_settings_callback(_, callback_query):
              "• You can customize your experience with this bot\n"
              "• Get information about your account\n"
              "• Check your usage statistics",
-        parse_mode="Markdown",
+        parse_mode="md",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Account Info", callback_data="account_info")],
