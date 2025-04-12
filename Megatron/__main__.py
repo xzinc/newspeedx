@@ -31,6 +31,10 @@ from Megatron.utils.database import Database
 
 # Configure logging only if not already configured
 if not logging.getLogger().handlers:
+    # Remove any existing handlers to avoid duplicate logs
+    for handler in logging.root.handlers[:]:
+        logging.root.removeHandler(handler)
+
     # Configure logging with a single handler
     logging.basicConfig(
         level=logging.INFO,
