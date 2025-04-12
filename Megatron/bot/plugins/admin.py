@@ -15,22 +15,22 @@ from Megatron.bot import StreamBot
 from Megatron.vars import Var
 from Megatron.utils.broadcast_helper import send_msg
 from Megatron.utils.database import Database
- 
+
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
 broadcast_ids = {}
 
 
-@StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID) & ~filters.edited)
-async def sts(c: Client, m: Message):
+@StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID))
+async def sts(_: Client, m: Message):
     total_users = await db.total_users_count()
     await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode="Markdown", quote=True)
 
 
 @StreamBot.on_message(filters.private & filters.command("broadcast") & filters.user(Var.OWNER_ID) & filters.reply)
 async def open_broadcast_handler(bot, message):
-	await broadcast_handler(c=bot, m=message)
+    await broadcast_handler(c=bot, m=message)
 
 
 async def send_msg(user_id, message):
@@ -53,11 +53,11 @@ async def send_msg(user_id, message):
         return 500, f"{user_id} : {traceback.format_exc()}\n"
 
 
-async def broadcast_handler(c, m):
+async def broadcast_handler(_, m):
     all_users = await db.get_all_users()
     broadcast_msg = m.reply_to_message
     while True:
-        broadcast_id = ''.join([random.choice(string.ascii_letters) for i in range(3)])
+        broadcast_id = ''.join([random.choice(string.ascii_letters) for _ in range(3)])
         if not broadcast_ids.get(broadcast_id):
             break
     out = await m.reply_text(

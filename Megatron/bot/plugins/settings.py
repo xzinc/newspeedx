@@ -9,7 +9,7 @@ from Megatron.handlers.fsub import force_subscribe
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.command('settings') & filters.private & ~filters.edited)
+@StreamBot.on_message(filters.command('settings') & filters.private)
 async def settings_handler(bot, message: Message):
     """
     Handle the /settings command to show user settings
@@ -20,7 +20,7 @@ async def settings_handler(bot, message: Message):
             Var.BIN_CHANNEL,
             f"#NEW_USER: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) Started the bot and used settings."
         )
-    
+
     # Check for forced subscription
     if Var.UPDATES_CHANNEL:
         try:
@@ -52,7 +52,7 @@ async def settings_handler(bot, message: Message):
                 disable_web_page_preview=True
             )
             return
-    
+
     # Show settings menu
     await message.reply_text(
         text="**Here are your settings:**\n\n"
@@ -74,9 +74,9 @@ async def settings_handler(bot, message: Message):
 async def account_info_callback(bot, callback_query):
     user_id = callback_query.from_user.id
     user_name = callback_query.from_user.first_name
-    
+
     await callback_query.answer("Loading account information...")
-    
+
     await callback_query.message.edit_text(
         text=f"**Account Information**\n\n"
              f"• User ID: `{user_id}`\n"
@@ -93,12 +93,12 @@ async def account_info_callback(bot, callback_query):
 @StreamBot.on_callback_query(filters.regex('^usage_stats$'))
 async def usage_stats_callback(bot, callback_query):
     user_id = callback_query.from_user.id
-    
+
     await callback_query.answer("Loading usage statistics...")
-    
+
     # Here you would normally fetch actual usage statistics from the database
     # For now, we'll just show placeholder text
-    
+
     await callback_query.message.edit_text(
         text="**Usage Statistics**\n\n"
              "• Files Processed: Not tracked yet\n"
@@ -115,7 +115,7 @@ async def usage_stats_callback(bot, callback_query):
 @StreamBot.on_callback_query(filters.regex('^back_to_settings$'))
 async def back_to_settings_callback(bot, callback_query):
     await callback_query.answer("Returning to settings...")
-    
+
     await callback_query.message.edit_text(
         text="**Here are your settings:**\n\n"
              "• You can customize your experience with this bot\n"
