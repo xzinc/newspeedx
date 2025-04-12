@@ -4,20 +4,27 @@ import logging
 from pyrogram import Client
 
 # For Pyrogram 2.x, we need to import pyromod differently
+# We're using a try/except block to handle different versions of pyromod
+# and to continue even if pyromod is not available
 try:
-    # Try importing for Pyrogram 2.x
-    from pyromod.listen import Client as ListenClient
-    # Monkey patch the Client class
-    Client = ListenClient
-    logging.info("Using pyromod for Pyrogram 2.x")
-except ImportError:
-    # Fall back to old import for Pyrogram 1.x
+    # First try the Pyrogram 2.x import style
     try:
+        # This import style is for pyromod with Pyrogram 2.x
+        # pylint: disable=import-error
+        # type: ignore
+        from pyromod.listen import Client as ListenClient
+        # Monkey patch the Client class
+        Client = ListenClient
+        logging.info("Using pyromod for Pyrogram 2.x")
+    except ImportError:
+        # Fall back to Pyrogram 1.x import style
+        # pylint: disable=import-error
+        # type: ignore
         from pyromod import listen
         logging.info("Using pyromod for Pyrogram 1.x")
-    except ImportError:
-        # If all else fails, try to continue without pyromod
-        logging.warning("pyromod not found, some features may not work")
+except Exception as e:
+    # If all else fails, try to continue without pyromod
+    logging.warning(f"pyromod not found, some features may not work: {e}")
 
 # Import Session for time offset fix
 from pyrogram.session import Session
