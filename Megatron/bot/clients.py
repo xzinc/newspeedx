@@ -23,13 +23,14 @@ async def initialize_clients():
         print("No additional clients found, using default client")
         return
     for client_id, token in all_tokens.items():
+        # Initialize client with parameters compatible with Pyrogram 1.2.20
         instance = Client(
             session_name=":memory:",
             api_id=Var.API_ID,
             api_hash=Var.API_HASH,
             bot_token=token,
             sleep_threshold=Var.SLEEP_THRESHOLD,
-            no_updates=True,
+            no_updates=True
         )
         try:
             multi_clients[client_id] = await instance.start()

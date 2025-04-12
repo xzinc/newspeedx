@@ -6,6 +6,10 @@ import os
 # Set a very large time offset directly in the environment
 os.environ['PYROGRAM_TIME_OFFSET'] = '120'
 
+# Apply the session fix before importing Pyrogram
+from Megatron.utils.session_fix import apply_session_fix
+apply_session_fix()
+
 # Now import Pyrogram and other modules
 from .vars import Var
 from aiohttp import web

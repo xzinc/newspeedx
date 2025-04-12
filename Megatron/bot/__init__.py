@@ -28,6 +28,7 @@ if env_offset:
     except ValueError:
         logging.warning(f"Invalid PYROGRAM_TIME_OFFSET value: {env_offset}")
 
+# Initialize the bot with parameters compatible with Pyrogram 1.2.20
 StreamBot = Client(
     session_name=Var.SESSION_NAME,
     api_id=Var.API_ID,
@@ -35,8 +36,7 @@ StreamBot = Client(
     bot_token=Var.BOT_TOKEN,
     workdir="Megatron",
     plugins={"root": "Megatron/bot/plugins"},
-    sleep_threshold=Var.SLEEP_THRESHOLD,
-    workers=Var.WORKERS
+    sleep_threshold=Var.SLEEP_THRESHOLD
 )
 
 # Dictionary to store multiple bot clients for load balancing
