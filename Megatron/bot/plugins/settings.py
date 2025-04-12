@@ -5,11 +5,11 @@ from pyrogram.errors import UserNotParticipant
 from Megatron.bot import StreamBot
 from Megatron.vars import Var
 from Megatron.utils.database import Database
-from Megatron.handlers.fsub import force_subscribe
+from Megatron.handlers.fsub import force_subscribe  # Used in other parts of the code
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
-@StreamBot.on_message(filters.command('settings') & filters.private)
+@StreamBot.on_message(filters.command('settings') & filters.private & ~filters.edited)
 async def settings_handler(bot, message: Message):
     """
     Handle the /settings command to show user settings
@@ -71,7 +71,7 @@ async def settings_handler(bot, message: Message):
 
 # Add callback handlers for the settings menu
 @StreamBot.on_callback_query(filters.regex('^account_info$'))
-async def account_info_callback(bot, callback_query):
+async def account_info_callback(_, callback_query):
     user_id = callback_query.from_user.id
     user_name = callback_query.from_user.first_name
 
@@ -91,8 +91,9 @@ async def account_info_callback(bot, callback_query):
     )
 
 @StreamBot.on_callback_query(filters.regex('^usage_stats$'))
-async def usage_stats_callback(bot, callback_query):
-    user_id = callback_query.from_user.id
+async def usage_stats_callback(_, callback_query):
+    # user_id would be used if we were fetching actual usage statistics
+    # user_id = callback_query.from_user.id
 
     await callback_query.answer("Loading usage statistics...")
 
@@ -113,7 +114,7 @@ async def usage_stats_callback(bot, callback_query):
     )
 
 @StreamBot.on_callback_query(filters.regex('^back_to_settings$'))
-async def back_to_settings_callback(bot, callback_query):
+async def back_to_settings_callback(_, callback_query):
     await callback_query.answer("Returning to settings...")
 
     await callback_query.message.edit_text(

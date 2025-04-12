@@ -3,7 +3,7 @@ import logging
 from urllib.parse import quote_plus
 
 from pyrogram import filters, Client
-from pyrogram.errors import FloodWait, UserNotParticipant
+from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
 from Megatron.bot import StreamBot
@@ -78,7 +78,22 @@ async def media_receive_handler(c: Client, m: Message):
             file_name = file.file_name
 
         # Forward the message to the bin channel
-        log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+        try:
+            log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+            if not log_msg or not hasattr(log_msg, 'message_id'):
+                logging.error("Forward failed: log_msg is invalid or has no message_id attribute")
+                await m.reply_text(
+                    "Sorry, something went wrong while generating your link. Please try again later.",
+                    quote=True
+                )
+                return
+        except Exception as e:
+            logging.error(f"Forward failed: {e}")
+            await m.reply_text(
+                "Sorry, something went wrong while generating your link. Please try again later.",
+                quote=True
+            )
+            return
 
         # Check if log_msg is valid and has message_id
         if log_msg and hasattr(log_msg, 'message_id'):
@@ -132,14 +147,33 @@ async def media_receive_handler(c: Client, m: Message):
         await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Got FloodWait of {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**User ID:** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="Markdown")
 
 
-@StreamBot.on_message(filters.channel & (filters.document | filters.video | filters.photo), group=-1)
+@StreamBot.on_message(filters.channel & (filters.document | filters.video | filters.photo) & ~filters.edited & ~filters.forwarded, group=-1)
 async def channel_receive_handler(bot, broadcast):
     if int(broadcast.chat.id) in Var.BANNED_CHANNELS:
         await bot.leave_chat(broadcast.chat.id)
         return
     try:
         # Forward the message to the bin channel
-        log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
+        try:
+            log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
+            if not log_msg or not hasattr(log_msg, 'message_id'):
+                logging.error("Forward failed: log_msg is invalid or has no message_id attribute")
+                await bot.send_message(
+                    chat_id=Var.BIN_CHANNEL,
+                    text=f"#ERROR_FORWARD: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}). The forwarded message was invalid.",
+                    disable_web_page_preview=True,
+                    parse_mode="md"
+                )
+                return
+        except Exception as e:
+            logging.error(f"Forward failed: {e}")
+            await bot.send_message(
+                chat_id=Var.BIN_CHANNEL,
+                text=f"#ERROR_FORWARD: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}). Error: {e}",
+                disable_web_page_preview=True,
+                parse_mode="md"
+            )
+            return
 
         # Check if log_msg is valid and has message_id
         if log_msg and hasattr(log_msg, 'message_id'):

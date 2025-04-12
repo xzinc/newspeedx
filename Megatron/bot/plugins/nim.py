@@ -17,7 +17,7 @@ async def nimdownloader(c: Client, m: Message):
                 await c.send_message(
                     chat_id=m.chat.id,
                     text="Sorry, You are Banned to use me. Contact me [Admin](https://t.me/filmyxbot).",
-                    parse_mode="markdown",
+                    parse_mode="md",
                     disable_web_page_preview=True
                 )
                 return
@@ -32,14 +32,14 @@ async def nimdownloader(c: Client, m: Message):
                         ]
                     ]
                 ),
-                parse_mode="markdown"
+                parse_mode="md"
             )
             return
         except Exception:
             await c.send_message(
                 chat_id=m.chat.id,
                 text="Something went Wrong. Contact my [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8).",
-                parse_mode="markdown",
+                parse_mode="md",
                 disable_web_page_preview=True)
             return
     chat = m.chat
@@ -64,7 +64,7 @@ async def nimdownloader(c: Client, m: Message):
             request = post(url, data).json()["fileUrl"]
 
             log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-            await log_msg.reply_text(text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Requested Link:** {txt}\n**Download Link:**\n✨ {request}", disable_web_page_preview=True, parse_mode="Markdown", quote=True)
+            await log_msg.reply_text(text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Requested Link:** {txt}\n**Download Link:**\n✨ {request}", disable_web_page_preview=True, parse_mode="md", quote=True)
 
             msg = "**لینک نیم بهای شما ایجاد شد 😄**\n\n⚜️ **لینک درخواستی شما** : [لینک]({})\n\n⚜️ **لینک نیم بهای شما :**\n✨ سرور نیم بها : [لینک]({})\n\n✨ @FiletoLinkTelegramBot ✨"
             await m.reply_text(

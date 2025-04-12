@@ -18,7 +18,7 @@ async def force_subscribe(bot, cmd):
             await bot.send_message(
                 chat_id=cmd.from_user.id,
                 text="✨ You are Banned due not to pay attention to the rules !. Contact [Support Group](https://t.me/+5vcBlhrleuMwNThh) if you think you've banned wrongly.\n\n✨.",
-                parse_mode="markdown",
+                parse_mode="md",
                 disable_web_page_preview=True
             )
             return 400
@@ -36,14 +36,14 @@ async def force_subscribe(bot, cmd):
                     ]
                 ]
             ),
-            parse_mode="markdown"
+            parse_mode="md"
         )
         return 400
     except Exception:
         await bot.send_message(
             chat_id=cmd.from_user.id,
             text="Something went Wrong. Contact [Support](https://t.me/filmyxbot).",
-            parse_mode="markdown",
+            parse_mode="md",
             disable_web_page_preview=True
         )
         return 400
