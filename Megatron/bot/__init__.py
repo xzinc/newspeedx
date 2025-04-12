@@ -1,5 +1,4 @@
 import logging
-from typing import Dict, Any  # Used for type hints
 
 # Import Pyrogram and related modules
 from pyrogram import Client
@@ -17,6 +16,7 @@ except ImportError:
         from pyromod import listen
         logging.info("Using pyromod for Pyrogram 1.x")
     except ImportError:
+        # If all else fails, try to continue without pyromod
         logging.warning("pyromod not found, some features may not work")
 
 # Import Session for time offset fix
@@ -27,10 +27,10 @@ from ..vars import Var
 # Fix for "msg_id is too low" error by setting a time offset
 # This is critical for the bot to work properly
 
-# Set a very large default time offset (120 seconds in the future)
+# Set a very large default time offset (300 seconds in the future)
 # This ensures that msg_id will always be high enough
-Session.time_offset = 120
-logging.info("Set default Pyrogram session time offset to 120 seconds")
+Session.time_offset = 300
+logging.info("Set default Pyrogram session time offset to 300 seconds")
 
 # Try to get the time offset from environment variable
 import os
@@ -57,19 +57,19 @@ StreamBot = Client(
 
 # Dictionary to store multiple bot clients for load balancing
 # Format: {client_id: Client instance}
-multi_clients: Dict[int, Client] = {}
+multi_clients = {}
 
 # Dictionary to track work load of each client
 # Format: {client_id: work_load_count}
-work_loads: Dict[int, int] = {}
+work_loads = {}
 
 # Bot information container
 class BotInfo:
     """Container for bot information."""
-    username: str = ""
-    first_name: str = ""
-    dc_id: int = 0
-    bots: Dict[int, Dict[str, Any]] = {}
+    username = ""
+    first_name = ""
+    dc_id = 0
+    bots = {}
 
 # Initialize bot info container
 bot_info = BotInfo()

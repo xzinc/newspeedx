@@ -2,7 +2,7 @@ aiohttp
 aiofiles
 dnspython
 motor
-pyromod-listen
+pyromod==1.5
 python-dotenv
 requests
 tgcrypto
