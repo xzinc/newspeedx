@@ -4,31 +4,9 @@ import sys
 import os
 
 # Set a very large time offset directly in the environment
-os.environ['PYROGRAM_TIME_OFFSET'] = '120'
+os.environ['PYROGRAM_TIME_OFFSET'] = '300'
 
-# Apply the session fix before importing Pyrogram
-from Megatron.utils.session_fix import apply_session_fix
-apply_session_fix()
-
-# Now import Pyrogram and other modules
-from .vars import Var
-from aiohttp import web
-from pyrogram import idle
-from pyrogram.session import Session
-
-# Set a very large time offset directly
-# This is critical to fix the "msg_id is too low" error
-Session.time_offset = 120
-logging.info(f"Set Session.time_offset to 120 seconds directly in __main__.py")
-
-from Megatron import utils
-from Megatron import bot_info
-from Megatron.server import web_server
-from Megatron.bot.clients import initialize_clients
-from Megatron.bot import StreamBot
-from Megatron.utils.database import Database
-
-# Configure logging only if not already configured
+# Configure logging first so we can see the session fix logs
 if not logging.getLogger().handlers:
     # Remove any existing handlers to avoid duplicate logs
     for handler in logging.root.handlers[:]:
@@ -42,6 +20,30 @@ if not logging.getLogger().handlers:
             logging.StreamHandler(sys.stdout),
         ]
     )
+
+# Apply the session fix before importing Pyrogram
+from Megatron.utils.session_fix import apply_session_fix
+apply_session_fix()
+
+# Now import Pyrogram and other modules
+from .vars import Var
+from aiohttp import web
+from pyrogram import idle
+from pyrogram.session import Session
+
+# Set a very large time offset directly again
+# This is critical to fix the "msg_id is too low" error
+Session.time_offset = 300
+logging.info(f"Set Session.time_offset to 300 seconds directly in __main__.py")
+
+from Megatron import utils
+from Megatron import bot_info
+from Megatron.server import web_server
+from Megatron.bot.clients import initialize_clients
+from Megatron.bot import StreamBot
+from Megatron.utils.database import Database
+
+# Logging is already configured above
 
 # Reduce logging noise from libraries
 logging.getLogger("pyrogram").setLevel(logging.ERROR)

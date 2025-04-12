@@ -1,9 +1,25 @@
 import logging
 from typing import Dict, Any  # Used for type hints
 
-# pyromod is required for the bot to work properly
-from pyromod import listen  # Required for the bot to work
+# Import Pyrogram and related modules
 from pyrogram import Client
+
+# For Pyrogram 2.x, we need to import pyromod differently
+try:
+    # Try importing for Pyrogram 2.x
+    from pyromod.listen import Client as ListenClient
+    # Monkey patch the Client class
+    Client = ListenClient
+    logging.info("Using pyromod for Pyrogram 2.x")
+except ImportError:
+    # Fall back to old import for Pyrogram 1.x
+    try:
+        from pyromod import listen
+        logging.info("Using pyromod for Pyrogram 1.x")
+    except ImportError:
+        logging.warning("pyromod not found, some features may not work")
+
+# Import Session for time offset fix
 from pyrogram.session import Session
 
 from ..vars import Var
@@ -28,9 +44,9 @@ if env_offset:
     except ValueError:
         logging.warning(f"Invalid PYROGRAM_TIME_OFFSET value: {env_offset}")
 
-# Initialize the bot with parameters compatible with Pyrogram 1.2.20
+# Initialize the bot with parameters compatible with Pyrogram 2.0.106
 StreamBot = Client(
-    session_name=Var.SESSION_NAME,
+    name=Var.SESSION_NAME,  # Changed from session_name to name for Pyrogram 2.x
     api_id=Var.API_ID,
     api_hash=Var.API_HASH,
     bot_token=Var.BOT_TOKEN,

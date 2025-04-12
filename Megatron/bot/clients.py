@@ -23,9 +23,9 @@ async def initialize_clients():
         print("No additional clients found, using default client")
         return
     for client_id, token in all_tokens.items():
-        # Initialize client with parameters compatible with Pyrogram 1.2.20
+        # Initialize client with parameters compatible with Pyrogram 2.0.106
         instance = Client(
-            session_name=":memory:",
+            name=f"bot{client_id}",  # Changed from session_name to name for Pyrogram 2.x
             api_id=Var.API_ID,
             api_hash=Var.API_HASH,
             bot_token=token,

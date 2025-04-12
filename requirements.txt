@@ -2,9 +2,9 @@ aiohttp
 aiofiles
 dnspython
 motor
-pyromod
+pyromod-listen
 python-dotenv
 requests
 tgcrypto
-pyrogram==1.2.20
+pyrogram==2.0.106
 ntplib
