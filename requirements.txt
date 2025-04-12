@@ -2,7 +2,7 @@ aiohttp
 aiofiles
 dnspython
 motor
-git+https://github.com/usernein/pyromod@2.x
+git+https://github.com/usernein/pyromod
 python-dotenv
 requests
 tgcrypto
