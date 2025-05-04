@@ -34,17 +34,25 @@ class Var(object):
     FORCE_SUB_ENABLED = environ.get("FORCE_SUB_ENABLED", "True").lower() == "true"
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-100")).split()))
 
-    # Handle the new Heroku URL format with random strings
+    # Handle the new Heroku URL format with random strings (APPNAME-IDENTIFIER.herokuapp.com)
     # If FQDN is explicitly set, use it; otherwise construct it based on APP_NAME
     if environ.get("FQDN"):
         FQDN = str(environ.get("FQDN"))
     elif ON_HEROKU:
         # Get the full Heroku domain from HEROKU_APP_URL if available
         if environ.get("HEROKU_APP_URL"):
-            FQDN = str(environ.get("HEROKU_APP_URL")).replace("https://", "").replace("http://", "").rstrip("/")
+            # Extract just the domain part from the URL
+            heroku_url = str(environ.get("HEROKU_APP_URL"))
+            from urllib.parse import urlparse
+            parsed_url = urlparse(heroku_url)
+            # Use the netloc (domain) part
+            FQDN = parsed_url.netloc if parsed_url.netloc else heroku_url.replace("https://", "").replace("http://", "").rstrip("/")
         else:
-            # Default to the old format if no specific URL is provided
+            # We can't predict the random identifier, so we need to set HEROKU_APP_URL manually
+            # For now, use the APP_NAME and hope it's an older app without the identifier
             FQDN = APP_NAME + ".herokuapp.com"
+            print(f"WARNING: HEROKU_APP_URL not set. Using {FQDN} which may not work with newer Heroku apps.")
+            print("Please set the HEROKU_APP_URL environment variable to your full Heroku app URL.")
     else:
         FQDN = BIND_ADDRESS
 

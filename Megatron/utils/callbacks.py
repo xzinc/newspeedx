@@ -78,7 +78,8 @@ async def button(bot, cmd: CallbackQuery):
       return
     try:
       user_id = cb_data.split("_", 1)[1]
-      await bot.unban_chat_member(chat_id=Var.UPDATES_CHANNEL, user_id=int(user_id), only_if_banned=True)
+      # Remove the only_if_banned parameter which is not supported in your Pyrogram version
+      await bot.unban_chat_member(chat_id=Var.UPDATES_CHANNEL, user_id=int(user_id))
       await cmd.answer("User Unbanned from Updates Channel", show_alert=True)
 
       # Log the unban action

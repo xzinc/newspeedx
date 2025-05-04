@@ -95,10 +95,10 @@ async def unban_user(bot: Client, m: Message):
 
     # Unban the user
     try:
+        # Remove the only_if_banned parameter which is not supported in your Pyrogram version
         await bot.unban_chat_member(
             chat_id=int(Var.UPDATES_CHANNEL),
-            user_id=user_id,
-            only_if_banned=True
+            user_id=user_id
         )
 
         # Send confirmation
