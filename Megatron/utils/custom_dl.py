@@ -118,7 +118,8 @@ class ByteStreamer:
                 await media_session.start()
 
                 for _ in range(6):
-                    exported_auth = await client.send(
+                    # Fix for Pyrogram 2.0.106: use invoke() instead of send()
+                    exported_auth = await client.invoke(
                         raw.functions.auth.ExportAuthorization(dc_id=file_id.dc_id)
                     )
 

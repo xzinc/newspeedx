@@ -11,7 +11,7 @@ from pyrogram import enums
 
 @StreamBot.on_message(filters.command("nim") & filters.private)
 async def nimdownloader(c: Client, m: Message):
-    if Var.UPDATES_CHANNEL is not None:
+    if Var.UPDATES_CHANNEL is not None and Var.FORCE_SUB_ENABLED:
         try:
             user = await c.get_chat_member(Var.UPDATES_CHANNEL, m.chat.id)
             if user.status == "kicked":

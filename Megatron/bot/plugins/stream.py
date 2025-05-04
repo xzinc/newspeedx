@@ -49,7 +49,8 @@ async def media_receive_handler(c: Client, m: Message):
             Var.BIN_CHANNEL,
             f"#NEW_USER: \n\nNew User [{m.from_user.first_name}](tg://user?id={m.from_user.id}) Started the bot."
         )
-    if Var.UPDATES_CHANNEL:
+    # Check if updates channel is set and force subscribe is enabled
+    if Var.UPDATES_CHANNEL and Var.FORCE_SUB_ENABLED:
         fsub = await force_subscribe(c, m)
         if fsub == 400:
             return

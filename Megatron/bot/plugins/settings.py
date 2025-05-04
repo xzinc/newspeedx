@@ -23,8 +23,8 @@ async def settings_handler(bot, message: Message):
             f"#NEW_USER: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) Started the bot and used settings."
         )
 
-    # Check for forced subscription
-    if Var.UPDATES_CHANNEL:
+    # Check for forced subscription if enabled
+    if Var.UPDATES_CHANNEL and Var.FORCE_SUB_ENABLED:
         try:
             user = await bot.get_chat_member(int(Var.UPDATES_CHANNEL), message.from_user.id)
             if user.status == "kicked":

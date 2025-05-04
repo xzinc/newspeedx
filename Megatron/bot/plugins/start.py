@@ -25,7 +25,8 @@ async def start(b, m : Message):
     firstname = m.from_user.first_name
     usr_cmd = m.text.split("_")[-1]
     if usr_cmd == "/start":
-        if Var.UPDATES_CHANNEL:
+        # Check if updates channel is set and force subscribe is enabled
+        if Var.UPDATES_CHANNEL and Var.FORCE_SUB_ENABLED:
             fsub = await force_subscribe(b, m)
             if fsub == 400:
                 return
@@ -40,7 +41,8 @@ async def start(b, m : Message):
             disable_web_page_preview=True
         )
     else:
-        if Var.UPDATES_CHANNEL:
+        # Check if updates channel is set and force subscribe is enabled
+        if Var.UPDATES_CHANNEL and Var.FORCE_SUB_ENABLED:
             fsub = await force_subscribe(b, m)
             if fsub == 400:
                 return
@@ -61,7 +63,8 @@ async def help_handler(bot, message):
             Var.BIN_CHANNEL,
             f"#NEW_USER #joins #join_log: \n\nNew User [{message.from_user.first_name}](tg://user?id={message.from_user.id}) Started !!"
         )
-    if Var.UPDATES_CHANNEL:
+    # Check if updates channel is set and force subscribe is enabled
+    if Var.UPDATES_CHANNEL and Var.FORCE_SUB_ENABLED:
         fsub = await force_subscribe(bot, message)
         if fsub == 400:
             return
