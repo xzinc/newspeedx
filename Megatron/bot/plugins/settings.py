@@ -29,7 +29,7 @@ async def settings_handler(bot, message: Message):
             if user.status == "kicked":
                 await message.reply_text(
                     text="Sorry, you are banned. Contact support.",
-                    parse_mode="md",
+                    parse_mode="markdown",
                     disable_web_page_preview=True
                 )
                 return
@@ -43,13 +43,13 @@ async def settings_handler(bot, message: Message):
                         ]
                     ]
                 ),
-                parse_mode="md"
+                parse_mode="markdown"
             )
             return
         except Exception:
             await message.reply_text(
                 text="Something went wrong. Contact support.",
-                parse_mode="md",
+                parse_mode="markdown",
                 disable_web_page_preview=True
             )
             return
@@ -60,7 +60,7 @@ async def settings_handler(bot, message: Message):
              "• You can customize your experience with this bot\n"
              "• Get information about your account\n"
              "• Check your usage statistics",
-        parse_mode="md",
+        parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Account Info", callback_data="account_info")],
@@ -83,7 +83,7 @@ async def account_info_callback(_, callback_query):
              f"• User ID: `{user_id}`\n"
              f"• Name: {user_name}\n"
              f"• Bot Status: Active",
-        parse_mode="md",
+        parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Back to Settings", callback_data="back_to_settings")]
@@ -106,7 +106,7 @@ async def usage_stats_callback(_, callback_query):
              "• Files Processed: Not tracked yet\n"
              "• Bandwidth Used: Not tracked yet\n"
              "• Account Created: Not tracked yet",
-        parse_mode="md",
+        parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Back to Settings", callback_data="back_to_settings")]
@@ -123,7 +123,7 @@ async def back_to_settings_callback(_, callback_query):
              "• You can customize your experience with this bot\n"
              "• Get information about your account\n"
              "• Check your usage statistics",
-        parse_mode="md",
+        parse_mode="markdown",
         reply_markup=InlineKeyboardMarkup(
             [
                 [InlineKeyboardButton("Account Info", callback_data="account_info")],

@@ -102,7 +102,7 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}).\nException: {str(e)}",
                 disable_web_page_preview=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
             return
 
@@ -123,7 +123,7 @@ async def media_receive_handler(c: Client, m: Message):
                 text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Download Link:** {stream_link}\n**Short Link:** {short_link}",
                 disable_web_page_preview=True,
                 reply_to_message_id=log_msg.message_id,
-                parse_mode="md",
+                parse_mode="markdown",
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("࿋ Ban User ࿋", callback_data=f"ban_{m.from_user.id}")]])
             )
 
@@ -137,7 +137,7 @@ async def media_receive_handler(c: Client, m: Message):
                     ],
                 ),
                 quote=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
         else:
             # Handle case where log_msg is invalid
@@ -150,12 +150,12 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}). The forwarded message was invalid.",
                 disable_web_page_preview=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
     except FloodWait as e:
         print(f"Sleeping for {str(e.x)}s")
         await asyncio.sleep(e.x)
-        await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Got FloodWait of {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**User ID:** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="md")
+        await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Got FloodWait of {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**User ID:** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="markdown")
 
 
 @StreamBot.on_message(filters.channel & (filters.document | filters.video | filters.photo), group=-1)
@@ -185,7 +185,7 @@ async def channel_receive_handler(bot, broadcast):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}).\nException: {str(e)}",
                 disable_web_page_preview=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
             return
 
@@ -198,7 +198,7 @@ async def channel_receive_handler(bot, broadcast):
             await log_msg.reply_text(
                 text=f"**Channel Name:** `{broadcast.chat.title}`\n**Channel ID:** `{broadcast.chat.id}`\n**Link:** {stream_link}",
                 quote=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
 
             # Edit the original message with the download link
@@ -218,7 +218,7 @@ async def channel_receive_handler(bot, broadcast):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}). The forwarded message was invalid.",
                 disable_web_page_preview=True,
-                parse_mode="md"
+                parse_mode="markdown"
             )
     except FloodWait as w:
         logging.warning(f"Sleeping for {str(w.x)}s due to FloodWait")
@@ -227,7 +227,7 @@ async def channel_receive_handler(bot, broadcast):
             chat_id=Var.BIN_CHANNEL,
             text=f"Got FloodWait of {str(w.x)}s from {broadcast.chat.title}\n\n**Channel ID:** `{str(broadcast.chat.id)}`",
             disable_web_page_preview=True,
-            parse_mode="md"
+            parse_mode="markdown"
         )
     except Exception as e:
         logging.error(f"Error in channel_receive_handler: {e}")
@@ -235,5 +235,5 @@ async def channel_receive_handler(bot, broadcast):
             chat_id=Var.BIN_CHANNEL,
             text=f"#ERROR_TRACEBACK: `{e}`",
             disable_web_page_preview=True,
-            parse_mode="md"
+            parse_mode="markdown"
         )

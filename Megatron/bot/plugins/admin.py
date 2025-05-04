@@ -25,7 +25,7 @@ broadcast_ids = {}
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID))
 async def sts(_: Client, m: Message):
     total_users = await db.total_users_count()
-    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode="md", quote=True)
+    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode="markdown", quote=True)
 
 
 @StreamBot.on_message(filters.private & filters.command("broadcast") & filters.user(Var.OWNER_ID) & filters.reply)

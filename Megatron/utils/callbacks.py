@@ -15,7 +15,7 @@ async def button(bot, cmd: CallbackQuery):
         if user.status == "kicked":
           await cmd.message.edit(
             text="**✨ You are Banned due not to pay attention to the rules. Contact [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8) for further information if interested.\n\n✨ شما به علت عدم رعایت قوانین بن شده اید. جهت اطلاع بیشتر در صورت تمایل می توانید با [گروه پشتیبانی](https://t.me/joinchat/riq-psSksFtiMDU8) در ارتباط باشید.",
-            parse_mode="md",
+            parse_mode="markdown",
             disable_web_page_preview=True
           )
           return
@@ -32,19 +32,19 @@ async def button(bot, cmd: CallbackQuery):
               ]
             ]
           ),
-          parse_mode="md"
+          parse_mode="markdown"
         )
         return
       except Exception:
         await cmd.message.edit(
           text="Something went Wrong. Contact [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8).",
-          parse_mode="md",
+          parse_mode="markdown",
           disable_web_page_preview=True
         )
         return
     await cmd.message.edit(
       text=f"""Hey Dear {cmd.from_user.mention(style="md")} 🙋🏻‍♂️\nI'm Telegram File to Link Generator Bot.\n\nSend me any file & get the fast direct download link!\n\n""",
-      parse_mode="md",
+      parse_mode="markdown",
       reply_markup=InlineKeyboardMarkup(
         [
           [InlineKeyboardButton('✵ Updates Channel ✵', url='https://t.me/+FcsqT7u8gt1mMTdh'), InlineKeyboardButton('✵ Rules✵', url='https://t.me/highspeed_movies/7')],
