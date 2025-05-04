@@ -62,5 +62,30 @@ async def button(bot, cmd: CallbackQuery):
       user_id = cb_data.split("_", 1)[1]
       await bot.ban_chat_member(chat_id=Var.UPDATES_CHANNEL, user_id=int(user_id))
       await cmd.answer("User Banned from Updates Channel", show_alert=True)
+
+      # Log the ban action
+      await bot.send_message(
+        chat_id=Var.BIN_CHANNEL,
+        text=f"#BAN\n**User ID:** `{user_id}`\n**Banned by:** {cmd.from_user.mention}",
+        parse_mode=enums.ParseMode.MARKDOWN
+      )
     except Exception as e:
       await cmd.answer(f"Can't Ban Him!\n\nError: {e}", show_alert=True)
+
+  elif cb_data.startswith("unban_"):
+    if Var.UPDATES_CHANNEL is None:
+      await cmd.answer("You didn't Set any Updates Channel", show_alert=True)
+      return
+    try:
+      user_id = cb_data.split("_", 1)[1]
+      await bot.unban_chat_member(chat_id=Var.UPDATES_CHANNEL, user_id=int(user_id), only_if_banned=True)
+      await cmd.answer("User Unbanned from Updates Channel", show_alert=True)
+
+      # Log the unban action
+      await bot.send_message(
+        chat_id=Var.BIN_CHANNEL,
+        text=f"#UNBAN\n**User ID:** `{user_id}`\n**Unbanned by:** {cmd.from_user.mention}",
+        parse_mode=enums.ParseMode.MARKDOWN
+      )
+    except Exception as e:
+      await cmd.answer(f"Can't Unban Him!\n\nError: {e}", show_alert=True)

@@ -31,12 +31,23 @@ class Var(object):
         ON_HEROKU = False
     DATABASE_URL = str(environ.get('DATABASE_URL'))
     UPDATES_CHANNEL = environ.get("UPDATES_CHANNEL", None)
+    FORCE_SUB_ENABLED = environ.get("FORCE_SUB_ENABLED", "True").lower() == "true"
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-100")).split()))
-    FQDN = (
-        str(environ.get("FQDN", BIND_ADDRESS))
-        if not ON_HEROKU or environ.get("FQDN")
-        else APP_NAME + ".herokuapp.com"
-    )
+
+    # Handle the new Heroku URL format with random strings
+    # If FQDN is explicitly set, use it; otherwise construct it based on APP_NAME
+    if environ.get("FQDN"):
+        FQDN = str(environ.get("FQDN"))
+    elif ON_HEROKU:
+        # Get the full Heroku domain from HEROKU_APP_URL if available
+        if environ.get("HEROKU_APP_URL"):
+            FQDN = str(environ.get("HEROKU_APP_URL")).replace("https://", "").replace("http://", "").rstrip("/")
+        else:
+            # Default to the old format if no specific URL is provided
+            FQDN = APP_NAME + ".herokuapp.com"
+    else:
+        FQDN = BIND_ADDRESS
+
     if ON_HEROKU:
         URL = f"https://{FQDN}/"
     else:

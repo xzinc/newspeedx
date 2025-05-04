@@ -82,11 +82,55 @@ async def start_services():
     )
     await initialize_clients()
     print("----------------------------- DONE -----------------------------")
+
+    # Detect Heroku URL if on Heroku
     if Var.ON_HEROKU:
+        print("------------------ Detecting Heroku URL ------------------")
+        try:
+            import requests
+            import os
+
+            # Try to detect the actual Heroku URL
+            app_name = Var.APP_NAME
+
+            # If HEROKU_APP_URL is already set, use it
+            heroku_app_url = os.environ.get("HEROKU_APP_URL")
+            if heroku_app_url:
+                # Clean the URL
+                heroku_app_url = heroku_app_url.rstrip("/")
+                if not heroku_app_url.startswith("http"):
+                    heroku_app_url = f"https://{heroku_app_url}"
+
+                # Extract the domain
+                from urllib.parse import urlparse
+                domain = urlparse(heroku_app_url).netloc
+
+                # Update FQDN and URL
+                Var.FQDN = domain
+                Var.URL = f"https://{domain}/"
+                print(f"Using HEROKU_APP_URL: {Var.URL}")
+            else:
+                # Try to detect the URL
+                standard_url = f"https://{app_name}.herokuapp.com/"
+                try:
+                    response = requests.get(standard_url, timeout=5)
+                    if response.status_code < 500:
+                        print(f"Standard URL is working: {standard_url}")
+                        # No need to update as the default should work
+                    else:
+                        print(f"Standard URL returned status code {response.status_code}")
+                        print("Using default URL configuration")
+                except Exception as e:
+                    print(f"Error checking standard URL: {e}")
+                    print("Using default URL configuration")
+        except Exception as e:
+            print(f"Error detecting Heroku URL: {e}")
+            print("Using default URL configuration")
+
         print("------------------ Starting Keep Alive Service ------------------")
         print()
         asyncio.create_task(utils.ping_server())
-    print("-------------------- Initalizing Web Server --------------------")
+    print("-------------------- Initializing Web Server --------------------")
     app = web.AppRunner(await web_server())
     await app.setup()
     bind_address = "0.0.0.0" if Var.ON_HEROKU else Var.BIND_ADDRESS

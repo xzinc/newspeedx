@@ -8,6 +8,16 @@ from pyrogram import enums
 
 
 async def force_subscribe(bot, cmd):
+    # Check if force subscribe is enabled
+    if not Var.FORCE_SUB_ENABLED:
+        # Force subscribe is disabled, so return success
+        return 200
+
+    # Force subscribe is enabled, proceed with checks
+    if not Var.UPDATES_CHANNEL:
+        # No updates channel set, so return success
+        return 200
+
     try:
         invite_link = await bot.create_chat_invite_link(int(Var.UPDATES_CHANNEL))
     except FloodWait as e:
@@ -48,3 +58,6 @@ async def force_subscribe(bot, cmd):
             disable_web_page_preview=True
         )
         return 400
+
+    # User is a member of the channel, return success
+    return 200

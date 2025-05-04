@@ -7,7 +7,7 @@ import aiofiles  # Used for broadcast logging
 import datetime
 import traceback
 from pyrogram import filters, Client
-from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
 from Megatron.bot import StreamBot
 from Megatron.vars import Var
@@ -26,7 +26,100 @@ broadcast_ids = {}
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID))
 async def sts(_: Client, m: Message):
     total_users = await db.total_users_count()
-    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode=enums.ParseMode.MARKDOWN, quote=True)
+    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`\n**Force Subscribe:** `{'Enabled' if Var.FORCE_SUB_ENABLED else 'Disabled'}`", parse_mode=enums.ParseMode.MARKDOWN, quote=True)
+
+
+@StreamBot.on_message(filters.command("togglefsub") & filters.private & filters.user(Var.OWNER_ID))
+async def toggle_fsub(bot: Client, m: Message):
+    """Toggle force subscribe on/off"""
+    import os
+
+    # Get current status
+    current_status = os.environ.get("FORCE_SUB_ENABLED", "True").lower() == "true"
+
+    # Toggle status
+    new_status = not current_status
+
+    # Update environment variable
+    os.environ["FORCE_SUB_ENABLED"] = str(new_status)
+
+    # Update Var
+    Var.FORCE_SUB_ENABLED = new_status
+
+    # Send confirmation
+    await m.reply_text(
+        text=f"**Force Subscribe has been {'enabled' if new_status else 'disabled'}**\n\nUsers {'will' if new_status else 'will not'} be required to join the updates channel to use the bot.",
+        parse_mode=enums.ParseMode.MARKDOWN,
+        quote=True
+    )
+
+    # Log the change
+    await bot.send_message(
+        chat_id=Var.BIN_CHANNEL,
+        text=f"#FORCE_SUBSCRIBE\n**Status:** `{'Enabled' if new_status else 'Disabled'}`\n**Changed by:** {m.from_user.mention}",
+        parse_mode=enums.ParseMode.MARKDOWN
+    )
+
+
+@StreamBot.on_message(filters.command("unban") & filters.private & filters.user(Var.OWNER_ID))
+async def unban_user(bot: Client, m: Message):
+    """Unban a user from the updates channel"""
+    # Check if a user ID was provided
+    if len(m.command) != 2:
+        await m.reply_text(
+            text="**Usage:** `/unban user_id`\n\nPlease provide a user ID to unban.",
+            parse_mode=enums.ParseMode.MARKDOWN,
+            quote=True
+        )
+        return
+
+    # Get the user ID
+    try:
+        user_id = int(m.command[1])
+    except ValueError:
+        await m.reply_text(
+            text="**Error:** User ID must be a number.",
+            parse_mode=enums.ParseMode.MARKDOWN,
+            quote=True
+        )
+        return
+
+    # Check if updates channel is set
+    if not Var.UPDATES_CHANNEL:
+        await m.reply_text(
+            text="**Error:** No updates channel is set.",
+            parse_mode=enums.ParseMode.MARKDOWN,
+            quote=True
+        )
+        return
+
+    # Unban the user
+    try:
+        await bot.unban_chat_member(
+            chat_id=int(Var.UPDATES_CHANNEL),
+            user_id=user_id,
+            only_if_banned=True
+        )
+
+        # Send confirmation
+        await m.reply_text(
+            text=f"**User with ID `{user_id}` has been unbanned from the updates channel.**",
+            parse_mode=enums.ParseMode.MARKDOWN,
+            quote=True
+        )
+
+        # Log the unban
+        await bot.send_message(
+            chat_id=Var.BIN_CHANNEL,
+            text=f"#UNBAN\n**User ID:** `{user_id}`\n**Unbanned by:** {m.from_user.mention}",
+            parse_mode=enums.ParseMode.MARKDOWN
+        )
+    except Exception as e:
+        await m.reply_text(
+            text=f"**Error unbanning user:** `{str(e)}`",
+            parse_mode=enums.ParseMode.MARKDOWN,
+            quote=True
+        )
 
 
 @StreamBot.on_message(filters.private & filters.command("broadcast") & filters.user(Var.OWNER_ID) & filters.reply)
