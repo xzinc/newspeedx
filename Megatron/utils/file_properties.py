@@ -106,11 +106,11 @@ def get_hash(media_msg: Message) -> str:
             else:
                 # Fallback to a hash of the message ID if no file_unique_id
                 import hashlib
-                return hashlib.md5(str(media_msg.message_id).encode()).hexdigest()[:6]
+                return hashlib.md5(str(media_msg.id).encode()).hexdigest()[:6]
         else:
             # Fallback to a hash of the message ID if no media
             import hashlib
-            return hashlib.md5(str(media_msg.message_id).encode()).hexdigest()[:6]
+            return hashlib.md5(str(media_msg.id).encode()).hexdigest()[:6]
     except Exception as e:
         # Log the error and return a fallback hash
         import logging
@@ -133,11 +133,11 @@ def get_name(media_msg: Message) -> str:
                 # Fallback to a generic name based on media type
                 for attr in ["audio", "document", "photo", "video", "animation", "voice", "video_note", "sticker"]:
                     if hasattr(media_msg, attr):
-                        return f"{attr}_{media_msg.message_id}"
-                return f"file_{media_msg.message_id}"
+                        return f"{attr}_{media_msg.id}"
+                return f"file_{media_msg.id}"
         else:
             # Fallback to a generic name
-            return f"file_{media_msg.message_id}"
+            return f"file_{media_msg.id}"
     except Exception as e:
         # Log the error and return a fallback name
         import logging

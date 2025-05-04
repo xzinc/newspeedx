@@ -1,12 +1,13 @@
 from requests import post
-
-# Import directly from pyrogram
 from pyrogram import Client, filters
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from pyrogram.errors import UserNotParticipant
-
 from Megatron.vars import Var
 from Megatron.bot import StreamBot
+from pyrogram import enums
+
+# Import directly from pyrogram
+
 
 @StreamBot.on_message(filters.command("nim") & filters.private)
 async def nimdownloader(c: Client, m: Message):
@@ -17,7 +18,7 @@ async def nimdownloader(c: Client, m: Message):
                 await c.send_message(
                     chat_id=m.chat.id,
                     text="Sorry, You are Banned to use me. Contact me [Admin](https://t.me/filmyxbot).",
-                    parse_mode="markdown",
+                    parse_mode=enums.ParseMode.MARKDOWN,
                     disable_web_page_preview=True
                 )
                 return
@@ -32,14 +33,14 @@ async def nimdownloader(c: Client, m: Message):
                         ]
                     ]
                 ),
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
             return
         except Exception:
             await c.send_message(
                 chat_id=m.chat.id,
                 text="Something went Wrong. Contact my [Support Group](https://t.me/joinchat/riq-psSksFtiMDU8).",
-                parse_mode="markdown",
+                parse_mode=enums.ParseMode.MARKDOWN,
                 disable_web_page_preview=True)
             return
     chat = m.chat
@@ -64,7 +65,7 @@ async def nimdownloader(c: Client, m: Message):
             request = post(url, data).json()["fileUrl"]
 
             log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
-            await log_msg.reply_text(text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Requested Link:** {txt}\n**Download Link:**\n✨ {request}", disable_web_page_preview=True, parse_mode="markdown", quote=True)
+            await log_msg.reply_text(text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Requested Link:** {txt}\n**Download Link:**\n✨ {request}", disable_web_page_preview=True, parse_mode=enums.ParseMode.MARKDOWN, quote=True)
 
             msg = "@FiletoLinkTelegramBot ✨"
             await m.reply_text(

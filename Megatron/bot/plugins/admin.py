@@ -6,15 +6,16 @@ import asyncio
 import aiofiles  # Used for broadcast logging
 import datetime
 import traceback
-
 from pyrogram import filters, Client
 from pyrogram.types import Message
 from pyrogram.errors import FloodWait, InputUserDeactivated, UserIsBlocked, PeerIdInvalid
-
 from Megatron.bot import StreamBot
 from Megatron.vars import Var
 from Megatron.utils.broadcast_helper import send_msg
 from Megatron.utils.database import Database
+from pyrogram import enums
+
+
 
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
@@ -25,7 +26,7 @@ broadcast_ids = {}
 @StreamBot.on_message(filters.command("status") & filters.private & filters.user(Var.OWNER_ID))
 async def sts(_: Client, m: Message):
     total_users = await db.total_users_count()
-    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode="markdown", quote=True)
+    await m.reply_text(text=f"**Total Users in Database:** `{total_users}`", parse_mode=enums.ParseMode.MARKDOWN, quote=True)
 
 
 @StreamBot.on_message(filters.private & filters.command("broadcast") & filters.user(Var.OWNER_ID) & filters.reply)

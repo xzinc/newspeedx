@@ -1,13 +1,14 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton, Message
 from pyrogram.errors import UserNotParticipant  # Used in force_subscribe
-
 from Megatron.bot import StreamBot
 from Megatron.vars import Var
-# humanbytes is used in other files
 from Megatron.utils.human_readable import humanbytes
 from Megatron.utils.database import Database
 from Megatron.handlers.fsub import force_subscribe
+from pyrogram import enums
+
+# humanbytes is used in other files
 
 db = Database(Var.DATABASE_URL, Var.SESSION_NAME)
 
@@ -48,7 +49,7 @@ async def start(b, m : Message):
             await b.send_message(
                 chat_id=m.from_user.id,
                 text="✨ You're Banned due not to pay attention to the [rules](https://t.me/+uW4Saio7cmYwNjk1). Contact [Support ](https://t.me/TG_FatherBoT) if you think you've banned wrongly.\n\n✨",
-                parse_mode="markdown",
+                parse_mode=enums.ParseMode.MARKDOWN,
                 disable_web_page_preview=True
             )
 
@@ -66,7 +67,7 @@ async def help_handler(bot, message):
             return
     await message.reply_text(
         text="✨ Send me any file, I'll give you its direct download link\n\nAlso I'm supported in channels. Add me to channel as admin to make me workable\n\n✨",
-        parse_mode="markdown",
+        parse_mode=enums.ParseMode.MARKDOWN,
         disable_web_page_preview=True,
         reply_markup=InlineKeyboardMarkup(
             [

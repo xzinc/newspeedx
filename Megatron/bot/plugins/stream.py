@@ -2,7 +2,7 @@ import asyncio
 import logging
 from urllib.parse import quote_plus
 
-from pyrogram import filters, Client
+from pyrogram import filters, Client, enums
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -79,16 +79,16 @@ async def media_receive_handler(c: Client, m: Message):
 
         # Forward the message to the bin channel
         try:
-            logging.info(f"Attempting to forward message {m.message_id} from {m.from_user.first_name} to bin channel {Var.BIN_CHANNEL}")
+            logging.info(f"Attempting to forward message {m.id} from {m.from_user.first_name} to bin channel {Var.BIN_CHANNEL}")
             log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
 
             # Add detailed logging for debugging
             if log_msg:
-                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'message_id', 'unknown')}")
-                if hasattr(log_msg, 'message_id'):
-                    logging.info(f"Message ID attribute exists: {log_msg.message_id}")
+                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'id', 'unknown')}")
+                if hasattr(log_msg, 'id'):
+                    logging.info(f"Message ID attribute exists: {log_msg.id}")
                 else:
-                    logging.error("log_msg has no message_id attribute")
+                    logging.error("log_msg has no id attribute")
             else:
                 logging.error("Forward returned None instead of a Message object")
         except Exception as e:
@@ -102,15 +102,15 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}).\nException: {str(e)}",
                 disable_web_page_preview=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
             return
 
-        # Check if log_msg is valid and has message_id
-        if log_msg and hasattr(log_msg, 'message_id'):
+        # Check if log_msg is valid and has id
+        if log_msg and hasattr(log_msg, 'id'):
             # Generate the stream and short links
-            stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_name(m))}?hash={get_hash(log_msg)}"
-            short_link = f"{Var.URL}{get_hash(log_msg)}{log_msg.message_id}"
+            stream_link = f"{Var.URL}{log_msg.id}/{quote_plus(get_name(m))}?hash={get_hash(log_msg)}"
+            short_link = f"{Var.URL}{get_hash(log_msg)}{log_msg.id}"
 
             logging.info(f"Generated link: {stream_link} for {m.from_user.first_name}")
 
@@ -122,8 +122,8 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Download Link:** {stream_link}\n**Short Link:** {short_link}",
                 disable_web_page_preview=True,
-                reply_to_message_id=log_msg.message_id,
-                parse_mode="markdown",
+                reply_to_message_id=log_msg.id,
+                parse_mode=enums.ParseMode.MARKDOWN,
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("࿋ Ban User ࿋", callback_data=f"ban_{m.from_user.id}")]])
             )
 
@@ -137,11 +137,11 @@ async def media_receive_handler(c: Client, m: Message):
                     ],
                 ),
                 quote=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
         else:
             # Handle case where log_msg is invalid
-            logging.error("Forward failed: log_msg is invalid or has no message_id attribute")
+            logging.error("Forward failed: log_msg is invalid or has no id attribute")
             await m.reply_text(
                 "Sorry, something went wrong while generating your link. Please try again later.",
                 quote=True
@@ -150,12 +150,12 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}). The forwarded message was invalid.",
                 disable_web_page_preview=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
     except FloodWait as e:
         print(f"Sleeping for {str(e.x)}s")
         await asyncio.sleep(e.x)
-        await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Got FloodWait of {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**User ID:** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode="markdown")
+        await c.send_message(chat_id=Var.BIN_CHANNEL, text=f"Got FloodWait of {str(e.x)}s from [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n\n**User ID:** `{str(m.from_user.id)}`", disable_web_page_preview=True, parse_mode=enums.ParseMode.MARKDOWN)
 
 
 @StreamBot.on_message(filters.channel & (filters.document | filters.video | filters.photo), group=-1)
@@ -171,11 +171,11 @@ async def channel_receive_handler(bot, broadcast):
 
             # Add detailed logging for debugging
             if log_msg:
-                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'message_id', 'unknown')}")
-                if hasattr(log_msg, 'message_id'):
-                    logging.info(f"Message ID attribute exists: {log_msg.message_id}")
+                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'id', 'unknown')}")
+                if hasattr(log_msg, 'id'):
+                    logging.info(f"Message ID attribute exists: {log_msg.id}")
                 else:
-                    logging.error("log_msg has no message_id attribute")
+                    logging.error("log_msg has no id attribute")
             else:
                 logging.error("Forward returned None instead of a Message object")
         except Exception as e:
@@ -185,26 +185,26 @@ async def channel_receive_handler(bot, broadcast):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}).\nException: {str(e)}",
                 disable_web_page_preview=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
             return
 
-        # Check if log_msg is valid and has message_id
-        if log_msg and hasattr(log_msg, 'message_id'):
+        # Check if log_msg is valid and has id
+        if log_msg and hasattr(log_msg, 'id'):
             # Generate the stream link
-            stream_link = f"{Var.URL}{log_msg.message_id}/{quote_plus(get_name(broadcast))}?hash={get_hash(log_msg)}"
+            stream_link = f"{Var.URL}{log_msg.id}/{quote_plus(get_name(broadcast))}?hash={get_hash(log_msg)}"
 
             # Reply to the forwarded message with info
             await log_msg.reply_text(
                 text=f"**Channel Name:** `{broadcast.chat.title}`\n**Channel ID:** `{broadcast.chat.id}`\n**Link:** {stream_link}",
                 quote=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
 
             # Edit the original message with the download link
             await bot.edit_message_reply_markup(
                 chat_id=broadcast.chat.id,
-                message_id=broadcast.message_id,
+                message_id=broadcast.id,
                 reply_markup=InlineKeyboardMarkup(
                     [
                         [InlineKeyboardButton("📥 Direct Download Link ࿋", url=f"{stream_link}")]
@@ -213,12 +213,12 @@ async def channel_receive_handler(bot, broadcast):
             )
         else:
             # Handle case where log_msg is invalid
-            logging.error("Forward failed: log_msg is invalid or has no message_id attribute")
+            logging.error("Forward failed: log_msg is invalid or has no id attribute")
             await bot.send_message(
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}). The forwarded message was invalid.",
                 disable_web_page_preview=True,
-                parse_mode="markdown"
+                parse_mode=enums.ParseMode.MARKDOWN
             )
     except FloodWait as w:
         logging.warning(f"Sleeping for {str(w.x)}s due to FloodWait")
@@ -227,7 +227,7 @@ async def channel_receive_handler(bot, broadcast):
             chat_id=Var.BIN_CHANNEL,
             text=f"Got FloodWait of {str(w.x)}s from {broadcast.chat.title}\n\n**Channel ID:** `{str(broadcast.chat.id)}`",
             disable_web_page_preview=True,
-            parse_mode="markdown"
+            parse_mode=enums.ParseMode.MARKDOWN
         )
     except Exception as e:
         logging.error(f"Error in channel_receive_handler: {e}")
@@ -235,5 +235,5 @@ async def channel_receive_handler(bot, broadcast):
             chat_id=Var.BIN_CHANNEL,
             text=f"#ERROR_TRACEBACK: `{e}`",
             disable_web_page_preview=True,
-            parse_mode="markdown"
+            parse_mode=enums.ParseMode.MARKDOWN
         )
