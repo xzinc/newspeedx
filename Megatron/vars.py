@@ -34,25 +34,40 @@ class Var(object):
     FORCE_SUB_ENABLED = environ.get("FORCE_SUB_ENABLED", "True").lower() == "true"
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-100")).split()))
 
-    # Handle the new Heroku URL format with random strings (APPNAME-IDENTIFIER.herokuapp.com)
-    # If FQDN is explicitly set, use it; otherwise construct it based on APP_NAME
-    if environ.get("FQDN"):
+    # CRITICAL FIX: Handle the new Heroku URL format with random strings (APPNAME-IDENTIFIER.herokuapp.com)
+    # The FQDN must be set correctly for file links to work
+
+    # Option 1: Use HEROKU_DOMAIN if explicitly set (highest priority)
+    if environ.get("HEROKU_DOMAIN"):
+        FQDN = str(environ.get("HEROKU_DOMAIN"))
+        print(f"Using HEROKU_DOMAIN: {FQDN}")
+
+    # Option 2: Use FQDN if explicitly set (second priority)
+    elif environ.get("FQDN"):
         FQDN = str(environ.get("FQDN"))
-    elif ON_HEROKU:
-        # Get the full Heroku domain from HEROKU_APP_URL if available
-        if environ.get("HEROKU_APP_URL"):
-            # Extract just the domain part from the URL
-            heroku_url = str(environ.get("HEROKU_APP_URL"))
-            from urllib.parse import urlparse
-            parsed_url = urlparse(heroku_url)
-            # Use the netloc (domain) part
-            FQDN = parsed_url.netloc if parsed_url.netloc else heroku_url.replace("https://", "").replace("http://", "").rstrip("/")
+        print(f"Using FQDN: {FQDN}")
+
+    # Option 3: Extract domain from HEROKU_APP_URL if available (third priority)
+    elif ON_HEROKU and environ.get("HEROKU_APP_URL"):
+        heroku_url = str(environ.get("HEROKU_APP_URL"))
+        # Clean up the URL
+        heroku_url = heroku_url.replace("https://", "").replace("http://", "").rstrip("/")
+        # If it contains herokuapp.com, use it as is
+        if ".herokuapp.com" in heroku_url:
+            FQDN = heroku_url
         else:
-            # We can't predict the random identifier, so we need to set HEROKU_APP_URL manually
-            # For now, use the APP_NAME and hope it's an older app without the identifier
-            FQDN = APP_NAME + ".herokuapp.com"
-            print(f"WARNING: HEROKU_APP_URL not set. Using {FQDN} which may not work with newer Heroku apps.")
-            print("Please set the HEROKU_APP_URL environment variable to your full Heroku app URL.")
+            # Otherwise append herokuapp.com
+            FQDN = f"{heroku_url}.herokuapp.com"
+        print(f"Using domain from HEROKU_APP_URL: {FQDN}")
+
+    # Option 4: Use APP_NAME with .herokuapp.com (fallback, may not work with newer apps)
+    elif ON_HEROKU:
+        FQDN = APP_NAME + ".herokuapp.com"
+        print(f"WARNING: No domain configuration found. Using {FQDN} which may not work with newer Heroku apps.")
+        print("Please set the HEROKU_DOMAIN environment variable to your exact Heroku domain.")
+        print("Example: your-app-name-1234567890ab.herokuapp.com (without https:// or trailing slash)")
+
+    # Option 5: Not on Heroku, use BIND_ADDRESS
     else:
         FQDN = BIND_ADDRESS
 
