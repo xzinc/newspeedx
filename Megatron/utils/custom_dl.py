@@ -29,12 +29,12 @@ class ByteStreamer:
             client: the client that the cache is for.
             cached_file_ids: a dict of cached file IDs.
             cached_file_properties: a dict of cached file properties.
-        
+
         functions:
             generate_file_properties: returns the properties for a media of a specific message contained in Tuple.
             generate_media_session: returns the media session for the DC that contains the media file.
             yield_file: yield a file from telegram servers for streaming.
-            
+
         This is a modified version of the <https://github.com/eyaadh/megadlbot_oss/blob/master/mega/telegram/utils/custom_download.py>
         Thanks to Eyaadh <https://github.com/eyaadh>
         """
@@ -53,20 +53,48 @@ class ByteStreamer:
             await self.generate_file_properties(message_id)
             logging.debug(f"Cached file properties for message with ID {message_id}")
         return self.cached_file_ids[message_id]
-    
+
     async def generate_file_properties(self, message_id: int) -> FileId:
         """
         Generates the properties of a media file on a specific message.
         returns ths properties in a FIleId class.
+
+        Args:
+            message_id: The message ID to get file properties from
+
+        Returns:
+            FileId object with additional properties
+
+        Raises:
+            FIleNotFound: If the message is empty or doesn't contain media
         """
-        file_id = await get_file_ids(self.client, Var.BIN_CHANNEL, message_id)
-        logging.debug(f"Generated file ID and Unique ID for message with ID {message_id}")
-        if not file_id:
-            logging.debug(f"Message with ID {message_id} not found")
+        try:
+            logging.info(f"Generating file properties for message with ID {message_id}")
+
+            # Get file IDs from the message
+            file_id = await get_file_ids(self.client, Var.BIN_CHANNEL, message_id)
+
+            if not file_id:
+                logging.error(f"Failed to get file IDs for message with ID {message_id}")
+                raise FIleNotFound
+
+            # Log success
+            logging.info(f"Generated file ID and Unique ID for message with ID {message_id}")
+            logging.debug(f"File ID: {getattr(file_id, 'file_id', 'unknown')}")
+            logging.debug(f"Unique ID: {getattr(file_id, 'unique_id', 'unknown')}")
+            logging.debug(f"File size: {getattr(file_id, 'file_size', 0)}")
+            logging.debug(f"MIME type: {getattr(file_id, 'mime_type', 'unknown')}")
+            logging.debug(f"File name: {getattr(file_id, 'file_name', 'unknown')}")
+
+            # Cache the file ID
+            self.cached_file_ids[message_id] = file_id
+            logging.info(f"Cached media message with ID {message_id}")
+
+            return self.cached_file_ids[message_id]
+
+        except Exception as e:
+            logging.error(f"Error generating file properties for message with ID {message_id}: {e}")
             raise FIleNotFound
-        self.cached_file_ids[message_id] = file_id
-        logging.debug(f"Cached media message with ID {message_id}")
-        return self.cached_file_ids[message_id]
 
     async def generate_media_session(self, client: Client, file_id: FileId) -> Session:
         """
@@ -227,7 +255,7 @@ class ByteStreamer:
             logging.debug("Finished yielding file with {current_part} parts.")
             work_loads[index] -= 1
 
-    
+
     async def clean_cache(self) -> None:
         """
         function to clean the cache to reduce memory usage

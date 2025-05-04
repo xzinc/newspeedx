@@ -78,7 +78,33 @@ async def media_receive_handler(c: Client, m: Message):
             file_name = file.file_name
 
         # Forward the message to the bin channel
-        log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+        try:
+            logging.info(f"Attempting to forward message {m.message_id} from {m.from_user.first_name} to bin channel {Var.BIN_CHANNEL}")
+            log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
+
+            # Add detailed logging for debugging
+            if log_msg:
+                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'message_id', 'unknown')}")
+                if hasattr(log_msg, 'message_id'):
+                    logging.info(f"Message ID attribute exists: {log_msg.message_id}")
+                else:
+                    logging.error("log_msg has no message_id attribute")
+            else:
+                logging.error("Forward returned None instead of a Message object")
+        except Exception as e:
+            logging.error(f"Forward failed with exception: {e}")
+            await m.reply_text(
+                "Sorry, something went wrong while generating your link. Please try again later.",
+                quote=True
+            )
+            # Send detailed error to bin channel for debugging
+            await c.send_message(
+                chat_id=Var.BIN_CHANNEL,
+                text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}).\nException: {str(e)}",
+                disable_web_page_preview=True,
+                parse_mode="md"
+            )
+            return
 
         # Check if log_msg is valid and has message_id
         if log_msg and hasattr(log_msg, 'message_id'):
@@ -97,7 +123,7 @@ async def media_receive_handler(c: Client, m: Message):
                 text=f"Requested by [{m.from_user.first_name}](tg://user?id={m.from_user.id})\n**User ID:** `{m.from_user.id}`\n**Download Link:** {stream_link}\n**Short Link:** {short_link}",
                 disable_web_page_preview=True,
                 reply_to_message_id=log_msg.message_id,
-                parse_mode="Markdown",
+                parse_mode="md",
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("࿋ Ban User ࿋", callback_data=f"ban_{m.from_user.id}")]])
             )
 
@@ -111,7 +137,7 @@ async def media_receive_handler(c: Client, m: Message):
                     ],
                 ),
                 quote=True,
-                parse_mode="Markdown"
+                parse_mode="md"
             )
         else:
             # Handle case where log_msg is invalid
@@ -124,7 +150,7 @@ async def media_receive_handler(c: Client, m: Message):
                 chat_id=Var.BIN_CHANNEL,
                 text=f"#ERROR_FORWARD: Failed to forward message from {m.from_user.first_name} (ID: {m.from_user.id}). The forwarded message was invalid.",
                 disable_web_page_preview=True,
-                parse_mode="Markdown"
+                parse_mode="md"
             )
     except FloodWait as e:
         print(f"Sleeping for {str(e.x)}s")
@@ -139,7 +165,29 @@ async def channel_receive_handler(bot, broadcast):
         return
     try:
         # Forward the message to the bin channel
-        log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
+        try:
+            logging.info(f"Attempting to forward channel message from {broadcast.chat.title} (ID: {broadcast.chat.id}) to bin channel {Var.BIN_CHANNEL}")
+            log_msg = await broadcast.forward(chat_id=Var.BIN_CHANNEL)
+
+            # Add detailed logging for debugging
+            if log_msg:
+                logging.info(f"Forward successful. log_msg ID: {getattr(log_msg, 'message_id', 'unknown')}")
+                if hasattr(log_msg, 'message_id'):
+                    logging.info(f"Message ID attribute exists: {log_msg.message_id}")
+                else:
+                    logging.error("log_msg has no message_id attribute")
+            else:
+                logging.error("Forward returned None instead of a Message object")
+        except Exception as e:
+            logging.error(f"Forward failed with exception: {e}")
+            # Send detailed error to bin channel for debugging
+            await bot.send_message(
+                chat_id=Var.BIN_CHANNEL,
+                text=f"#ERROR_FORWARD_EXCEPTION: Failed to forward message from {broadcast.chat.title} (ID: {broadcast.chat.id}).\nException: {str(e)}",
+                disable_web_page_preview=True,
+                parse_mode="md"
+            )
+            return
 
         # Check if log_msg is valid and has message_id
         if log_msg and hasattr(log_msg, 'message_id'):
